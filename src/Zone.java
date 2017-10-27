@@ -8,6 +8,7 @@ public class Zone {
     private List<Request> requestList;
     private List<Request> redirectedRequestList;
     private Set<Zone> adjacentZones;
+    //TODO: make intervalTree from requests -> to determine overlapping timeframes
 
     public Zone(int zoneId, Set<Zone> adjacentZones) {
         this.zoneId = zoneId;
