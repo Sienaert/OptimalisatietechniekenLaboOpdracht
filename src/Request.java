@@ -4,10 +4,11 @@ public class Request {
     private int requestId;
     private int zoneId;
     private int dayIndex, startTime, duration;
-    private List<Car.carType> possibleVehicleTypes;
+    private List<Car.CarType> possibleVehicleTypes;
     private int penalty1, penalty2;
+    private boolean redirected;
 
-    public Request(int requestId, int zoneId, int dayIndex, int startTime, int duration, List<Car.carType> possibleVehicleTypes, int penalty1, int penalty2) {
+    public Request(int requestId, int zoneId, int dayIndex, int startTime, int duration, List<Car.CarType> possibleVehicleTypes, int penalty1, int penalty2) {
         this.requestId = requestId;
         this.zoneId = zoneId;
         this.dayIndex = dayIndex;
@@ -16,10 +17,20 @@ public class Request {
         this.possibleVehicleTypes = possibleVehicleTypes;
         this.penalty1 = penalty1;
         this.penalty2 = penalty2;
+        this.redirected = false;
+    }
+
+    public boolean isRedirected() {
+        return redirected;
+    }
+
+    public void setRedirected(boolean redirected) {
+        this.redirected = redirected;
     }
 
     public int getRequestId() {
         return requestId;
+
     }
 
     public int getZoneId() {
@@ -38,7 +49,7 @@ public class Request {
         return duration;
     }
 
-    public List<Car.carType> getPossibleVehicleTypes() {
+    public List<Car.CarType> getPossibleVehicleTypes() {
         return possibleVehicleTypes;
     }
 
