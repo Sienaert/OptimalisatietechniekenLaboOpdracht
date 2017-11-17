@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -12,10 +13,12 @@ public class Zone {
 
     //TODO: make intervalTree from requests -> to determine overlapping timeframes
 
-
-
     public Zone(int zoneId) {
         this.zoneId = zoneId;
+        carList = new ArrayList<>();
+        requestList = new ArrayList<>();
+        redirectedRequestList = new ArrayList<>();
+        adjacentZones = new ArrayList<>();
     }
 
     public int getZoneId() {
@@ -62,5 +65,10 @@ public class Zone {
 
 	}
 
-
+    @Override
+    public String toString() {
+        return "Zone{" +
+                "zoneId=" + zoneId +
+                '}';
+    }
 }

@@ -1,8 +1,17 @@
+import java.io.IOException;
 
 public class Test {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		Problem problem = null;
+
+		try {
+			problem = new Problem("toy1.csv");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		System.out.println(problem.toString());
 
 	}
 
