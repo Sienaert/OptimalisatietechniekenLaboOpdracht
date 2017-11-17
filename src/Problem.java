@@ -133,7 +133,7 @@ public class Problem {
 		for(Request q:requestList) {
 			
 			
-			z=zones.get(q.getZoneId());
+			z=q.getZone();
 			
 			z.addRequest(q);
     	
