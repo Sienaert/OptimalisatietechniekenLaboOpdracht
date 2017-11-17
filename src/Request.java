@@ -2,7 +2,7 @@ import java.util.List;
 
 public class Request implements Comparable{
     private int requestId;
-    private int zoneId;
+    private Zone zone;
     private int dayIndex, startTime, duration;
     private List<Car> possibleVehicleTypes;
     private int penalty1, penalty2;
@@ -10,9 +10,8 @@ public class Request implements Comparable{
     private boolean assigned;
 	private int carID;
 
-    public Request(int requestId, int zoneId, int dayIndex, int startTime, int duration, int penalty1, int penalty2) {
+    public Request(int requestId, int dayIndex, int startTime, int duration, int penalty1, int penalty2) {
         this.requestId = requestId;
-        this.zoneId = zoneId;
         this.dayIndex = dayIndex;
         this.startTime = startTime;
         this.duration = duration;
@@ -33,10 +32,6 @@ public class Request implements Comparable{
     public int getRequestId() {
         return requestId;
 
-    }
-
-    public int getZoneId() {
-        return zoneId;
     }
 
     public int getDayIndex() {
@@ -74,6 +69,14 @@ public class Request implements Comparable{
 	
 	
 
+    public Zone getZone() {
+        return zone;
+    }
+
+    public void setZone(Zone zone) {
+        this.zone = zone;
+    }
+
     public void setPossibleVehicleTypes(List<Car> possibleVehicleTypes) {
         this.possibleVehicleTypes = possibleVehicleTypes;
     }
@@ -107,7 +110,7 @@ public class Request implements Comparable{
 
 	@Override
 	public String toString() {
-		return "Request [requestId=" + requestId + ", zoneId=" + zoneId + ", dayIndex=" + dayIndex + ", startTime="
+		return "Request [requestId=" + requestId + ", zone=" + zone + ", dayIndex=" + dayIndex + ", startTime="
 				+ startTime + ", duration=" + duration + ", possibleVehicleTypes=" + possibleVehicleTypes
 				+ ", penalty1=" + penalty1 + ", penalty2=" + penalty2 + ", redirected=" + redirected + ", assigned="
 				+ assigned + "]";

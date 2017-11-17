@@ -5,20 +5,22 @@ import java.util.Set;
 public class Zone {
 
     private int zoneId;
-    private List<Car> carList=new ArrayList<Car>();
-    private List<Request> requestList=new ArrayList<Request>();
-    private List<Request> redirectedRequestList=new ArrayList<Request>();;
-    private List<Zone> adjacentZones=new ArrayList<Zone>();
+    private List<Car> carList;
+    private List<Request> requestList;
+    private List<Request> redirectedRequestList;
+    private List<Zone> adjacentZones;
     int latestCost=-1;
 
     //TODO: make intervalTree from requests -> to determine overlapping timeframes
 
-
-
     public Zone(int zoneId) {
         this.zoneId = zoneId;
-       
-        
+
+        carList = new ArrayList<>();
+        requestList = new ArrayList<>();
+        redirectedRequestList = new ArrayList<>();
+        adjacentZones = new ArrayList<>();
+
     }
 
     public int getZoneId() {
@@ -73,5 +75,10 @@ public class Zone {
 		latestCost=result;
 	}
 
-
+    @Override
+    public String toString() {
+        return "Zone{" +
+                "zoneId=" + zoneId +
+                '}';
+    }
 }
