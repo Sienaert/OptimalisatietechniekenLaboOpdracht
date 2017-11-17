@@ -9,35 +9,42 @@ public class Problem {
     private List<Car> carList;
     private int days;
 
-    private Problem(List<Request> requestList, List<Zone> zoneList, List<Car> carList, int days) {
-        this.requestList = requestList;
-        this.zoneList = zoneList;
-        this.carList = carList;
-        this.days = days;
-    }
+    public Problem(String csvFile) throws IOException{
+        requestList = new ArrayList<>();
+        zoneList = new ArrayList<>();
+        carList = new ArrayList<>();
 
-    public Problem (String csvFile) throws IOException{
+
         String line;
         String cvsSplitBy = ";";
 
         //Make map of requestID and possiblecars to fix after
-        Map<Integer, List<String>> carMap = new HashMap<>();
+        List<String> carMap = new ArrayList<>();
+
+        //And for ZoneID..
+        int[] zoneIDs;
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
 
             //Read Requests
             int numberOfRequests = Integer.parseInt(br.readLine().split(" ")[1]);
 
+            zoneIDs = new int[numberOfRequests];
+
             for(int requestId = 0; requestId < numberOfRequests ; requestId++ ){
                 line = br.readLine();
                 String[] request = line.split(cvsSplitBy);
 
-                //Fix links
-                List<String> possibleCars = new ArrayList<>();
-                for(int i = 5; i < request.length-3 ; i++) possibleCars.add(request[i]);
-                carMap.put(requestId, possibleCars);
+                //Fix zones
+                int zoneId = Integer.parseInt(request[1].substring(1));
+                zoneIDs[requestId] = zoneId;
 
-                requestList.add(new Request(requestId, Integer.parseInt(request[1]), Integer.parseInt(request[2]), Integer.parseInt(request[3]), Integer.parseInt(request[4]), Integer.parseInt(request[request.length-2]), Integer.parseInt(request[request.length-1])));
+                //Fix links
+                String possibleCars = request[5];
+                carMap.add(possibleCars);
+
+                Request newRequest = new Request(requestId, Integer.parseInt(request[2]), Integer.parseInt(request[3]), Integer.parseInt(request[4]), Integer.parseInt(request[request.length-2]), Integer.parseInt(request[request.length-1]));
+                requestList.add(newRequest);
             }
 
             //Read Zones
@@ -63,7 +70,10 @@ public class Problem {
             //Read Cars
             int numberOfCars = Integer.parseInt(br.readLine().split(" ")[1]);
 
-            for(int carId = 0 ; carId < numberOfCars ; carId++) carList.add(new Car(carId));
+            for(int i = 0 ; i < numberOfCars ; i++) {
+                line = br.readLine();
+                carList.add(new Car(Integer.parseInt(line.substring(line.length()-1))));
+            }
 
             //Read Days
             days = Integer.parseInt(br.readLine().split(" ")[1]);
@@ -71,16 +81,43 @@ public class Problem {
             //Fix car links in requests
             for(Request request : requestList){
                 List<Car> localCarList = new ArrayList<>();
-                List<String> possibleCars = carMap.get(request.getRequestId());
-                for(String carString : possibleCars){
+                String possibleCars = carMap.get(request.getRequestId());
+                String[] cars = possibleCars.split(",");
+                for(String carString : cars){
                     localCarList.add(carList.get(Integer.parseInt(carString.substring(carString.length()-1))));
                 }
                 request.setPossibleVehicleTypes(localCarList);
+
+                //Fix zoneID in request
+                request.setZone(zoneList.get(zoneIDs[requestList.indexOf(request)]));
             }
 
         }
 
+        
+        
+        
+        
     }
+
+    public List<Request> getRequestList() {
+        return requestList;
+    }
+
+    public List<Zone> getZoneList() {
+        return zoneList;
+    }
+
+    public List<Car> getCarList() {
+        return carList;
+    }
+
+    public int getDays() {
+        return days;
+        
+    }
+    
+    
     
     public void solve() {
     	
@@ -104,5 +141,33 @@ public class Problem {
     }
 		System.out.println(zoneList);
 		
+		
+		//make initial solution
+				z=zones.get(0);
+				List <Car> cl=z.getCarList();
+				cl.addAll(carList);
+				
+				for(Zone zone:zoneList) {	
+					zone.calculateCost();
+				}
+				
+				
+				
+				//start optimising
+				
+				
+		
+    }
+
+
+    @Override
+    public String toString() {
+        return "Problem{\n" +
+                "requestList=" + requestList +
+                ", \nzoneList=" + zoneList +
+                ", \ncarList=" + carList +
+                ", \ndays=" + days +
+                '}';
+
     }
 }

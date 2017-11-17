@@ -2,16 +2,16 @@ import java.util.List;
 
 public class Request implements Comparable{
     private int requestId;
-    private int zoneId;
+    private Zone zone;
     private int dayIndex, startTime, duration;
     private List<Car> possibleVehicleTypes;
     private int penalty1, penalty2;
     private boolean redirected;
     private boolean assigned;
+	private int carID;
 
-    public Request(int requestId, int zoneId, int dayIndex, int startTime, int duration, int penalty1, int penalty2) {
+    public Request(int requestId, int dayIndex, int startTime, int duration, int penalty1, int penalty2) {
         this.requestId = requestId;
-        this.zoneId = zoneId;
         this.dayIndex = dayIndex;
         this.startTime = startTime;
         this.duration = duration;
@@ -32,10 +32,6 @@ public class Request implements Comparable{
     public int getRequestId() {
         return requestId;
 
-    }
-
-    public int getZoneId() {
-        return zoneId;
     }
 
     public int getDayIndex() {
@@ -73,13 +69,48 @@ public class Request implements Comparable{
 	
 	
 
+    public Zone getZone() {
+        return zone;
+    }
+
+    public void setZone(Zone zone) {
+        this.zone = zone;
+    }
+
     public void setPossibleVehicleTypes(List<Car> possibleVehicleTypes) {
         this.possibleVehicleTypes = possibleVehicleTypes;
     }
 
+    
+    
+    public String printString() {
+    	
+    	if(assigned) {
+    		
+			return ""+requestId+";"+carID;
+    		
+    		
+    	}else {
+    		
+    		
+    		return "";
+    		
+    	}
+   
+    }
+    
+    
+	public int getCarID() {
+		return carID;
+	}
+
+	public void setCarID(int carID) {
+		this.carID = carID;
+	}
+
 	@Override
 	public String toString() {
-		return "Request [requestId=" + requestId + ", zoneId=" + zoneId + ", dayIndex=" + dayIndex + ", startTime="
+		return "Request [requestId=" + requestId + ", zone=" + zone + ", dayIndex=" + dayIndex + ", startTime="
 				+ startTime + ", duration=" + duration + ", possibleVehicleTypes=" + possibleVehicleTypes
 				+ ", penalty1=" + penalty1 + ", penalty2=" + penalty2 + ", redirected=" + redirected + ", assigned="
 				+ assigned + "]";
@@ -94,6 +125,8 @@ public class Request implements Comparable{
 		}
 		return 1;
 	}
+	
+	
 
 
 }
