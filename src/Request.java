@@ -1,12 +1,13 @@
 import java.util.List;
 
-public class Request {
+public class Request implements Comparable{
     private int requestId;
     private int zoneId;
     private int dayIndex, startTime, duration;
     private List<Car.CarType> possibleVehicleTypes;
     private int penalty1, penalty2;
     private boolean redirected;
+    private boolean assigned;
 
     public Request(int requestId, int zoneId, int dayIndex, int startTime, int duration, List<Car.CarType> possibleVehicleTypes, int penalty1, int penalty2) {
         this.requestId = requestId;
@@ -18,6 +19,7 @@ public class Request {
         this.penalty1 = penalty1;
         this.penalty2 = penalty2;
         this.redirected = false;
+        this.assigned=false;
     }
 
     public boolean isRedirected() {
@@ -60,12 +62,34 @@ public class Request {
     public int getPenalty2() {
         return penalty2;
     }
+    
+
+	public boolean isAssigned() {
+		return assigned;
+	}
+
+	public void setAssigned(boolean assigned) {
+		this.assigned = assigned;
+	}
+	
+	
 
 	@Override
 	public String toString() {
 		return "Request [requestId=" + requestId + ", zoneId=" + zoneId + ", dayIndex=" + dayIndex + ", startTime="
 				+ startTime + ", duration=" + duration + ", possibleVehicleTypes=" + possibleVehicleTypes
-				+ ", penalty1=" + penalty1 + ", penalty2=" + penalty2 + ", redirected=" + redirected + "]";
+				+ ", penalty1=" + penalty1 + ", penalty2=" + penalty2 + ", redirected=" + redirected + ", assigned="
+				+ assigned + "]";
+	}
+
+	@Override
+	public int compareTo(Object arg0) {
+		// TODO Auto-generated method stub
+		int result;
+		if(assigned) {
+			return -1;
+		}
+		return 1;
 	}
     
     
