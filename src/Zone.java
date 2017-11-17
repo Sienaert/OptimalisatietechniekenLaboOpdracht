@@ -7,12 +7,13 @@ public class Zone {
     private List<Car> carList;
     private List<Request> requestList;
     private List<Request> redirectedRequestList;
-    private Set<Zone> adjacentZones;
+    private List<Zone> adjacentZones;
     //TODO: make intervalTree from requests -> to determine overlapping timeframes
 
-    public Zone(int zoneId, Set<Zone> adjacentZones) {
+
+
+    public Zone(int zoneId) {
         this.zoneId = zoneId;
-        this.adjacentZones = adjacentZones;
     }
 
     public int getZoneId() {
@@ -31,7 +32,11 @@ public class Zone {
         return redirectedRequestList;
     }
 
-    public Set<Zone> getAdjacentZones() {
+    public List<Zone> getAdjacentZones() {
         return adjacentZones;
+    }
+
+    public void setAdjacentZones(List<Zone> adjacentZones) {
+        this.adjacentZones = adjacentZones;
     }
 }
