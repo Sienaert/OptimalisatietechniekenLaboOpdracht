@@ -1,13 +1,14 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 public class Zone {
 
     private int zoneId;
-    private List<Car> carList;
-    private List<Request> requestList;
-    private List<Request> redirectedRequestList;
-    private List<Zone> adjacentZones;
+    private List<Car> carList=new ArrayList<Car>();
+    private List<Request> requestList=new ArrayList<Request>();
+    private List<Request> redirectedRequestList=new ArrayList<Request>();;
+    private List<Zone> adjacentZones=new ArrayList<Zone>();
     int latestCost=-1;
 
     //TODO: make intervalTree from requests -> to determine overlapping timeframes
@@ -16,6 +17,8 @@ public class Zone {
 
     public Zone(int zoneId) {
         this.zoneId = zoneId;
+       
+        
     }
 
     public int getZoneId() {
@@ -47,9 +50,7 @@ public class Zone {
 		requestList.add(q);
 	}
 
-	public void setCost(int i) {
-		latestCost=i;
-	}
+	
 
 	public String getAssignmentsString() {
 
@@ -60,6 +61,16 @@ public class Zone {
 		}
 		return sb.toString();
 
+	}
+	
+	
+	public void calculateCost() {
+		//TODO implement
+		int result=0;
+		
+		
+		
+		latestCost=result;
 	}
 
 

@@ -102,7 +102,27 @@ public class Problem {
     	
     	
     }
+		
 		System.out.println(zoneList);
+		
+		
+		
+		
+		//make initial solution
+		z=zones.get(0);
+		List <Car> cl=z.getCarList();
+		cl.addAll(carList);
+		
+		for(Zone zone:zoneList) {	
+			zone.calculateCost();
+		}
+		
+		
+		
+		//start optimising
+		
+		
+		
 		
     }
 }
