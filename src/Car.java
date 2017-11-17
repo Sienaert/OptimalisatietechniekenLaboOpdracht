@@ -28,4 +28,11 @@ public class Car {
     public enum CarType{
         TYPE1;
     }
+
+	@Override
+	public String toString() {
+		return "Car [carId=" + carId + ", carType=" + carType + ", acceptedRequests=" + acceptedRequests + "]";
+	}
+    
+    
 }

@@ -8,6 +8,7 @@ public class Zone {
     private List<Request> requestList;
     private List<Request> redirectedRequestList;
     private Set<Zone> adjacentZones;
+    int latestCost=-1;
     //TODO: make intervalTree from requests -> to determine overlapping timeframes
 
     public Zone(int zoneId, Set<Zone> adjacentZones) {
@@ -34,4 +35,13 @@ public class Zone {
     public Set<Zone> getAdjacentZones() {
         return adjacentZones;
     }
+
+	public void addRequest(Request q) {
+		// TODO Auto-generated method stub
+		requestList.add(q);
+	}
+	
+	public void setCost(int i) {
+		latestCost=i;
+	}
 }
