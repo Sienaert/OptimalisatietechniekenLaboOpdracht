@@ -8,6 +8,8 @@ public class Zone {
     private List<Request> requestList;
     private List<Request> redirectedRequestList;
     private List<Zone> adjacentZones;
+    int latestCost=-1;
+
     //TODO: make intervalTree from requests -> to determine overlapping timeframes
 
 
@@ -39,4 +41,26 @@ public class Zone {
     public void setAdjacentZones(List<Zone> adjacentZones) {
         this.adjacentZones = adjacentZones;
     }
+
+	public void addRequest(Request q) {
+		// TODO Auto-generated method stub
+		requestList.add(q);
+	}
+
+	public void setCost(int i) {
+		latestCost=i;
+	}
+
+	public String getAssignmentsString() {
+
+		StringBuilder sb=new StringBuilder("");
+
+		for (Car c:carList) {
+		sb.append(c.getCarId()+";"+zoneId);
+		}
+		return sb.toString();
+
+	}
+
+
 }
