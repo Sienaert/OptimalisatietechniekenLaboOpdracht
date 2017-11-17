@@ -16,7 +16,7 @@ public class Problem {
         this.days = days;
     }
 
-    public Problem loadCSV(String csvFile) throws IOException{
+    public Problem (String csvFile) throws IOException{
         String line;
         String cvsSplitBy = ";";
 
@@ -26,7 +26,7 @@ public class Problem {
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
 
             //Read Requests
-            int numberOfRequests = Integer.parseInt(br.readLine().split(":")[1]);
+            int numberOfRequests = Integer.parseInt(br.readLine().split(" ")[1]);
 
             for(int requestId = 0; requestId < numberOfRequests ; requestId++ ){
                 line = br.readLine();
@@ -41,7 +41,7 @@ public class Problem {
             }
 
             //Read Zones
-            int numberOfZones = Integer.parseInt(br.readLine().split(":")[1]);
+            int numberOfZones = Integer.parseInt(br.readLine().split(" ")[1]);
 
             for(int zoneId = 0; zoneId < numberOfZones ; zoneId++ ){
                 zoneList.add(new Zone(zoneId));
@@ -61,12 +61,12 @@ public class Problem {
             }
 
             //Read Cars
-            int numberOfCars = Integer.parseInt(br.readLine().split(":")[1]);
+            int numberOfCars = Integer.parseInt(br.readLine().split(" ")[1]);
 
             for(int carId = 0 ; carId < numberOfCars ; carId++) carList.add(new Car(carId));
 
             //Read Days
-            days = Integer.parseInt(br.readLine().split(":")[1]);
+            days = Integer.parseInt(br.readLine().split(" ")[1]);
 
             //Fix car links in requests
             for(Request request : requestList){
@@ -80,8 +80,29 @@ public class Problem {
 
         }
 
-
-        return new Problem(requestList, zoneList, carList, days);
-
+    }
+    
+    public void solve() {
+    	
+    	//adding request to zones
+    	Map<Integer, Zone>zones=new <Integer, Zone> HashMap();
+		for(Zone z:zoneList) {
+			
+			zones.put(z.getZoneId(), z);
+		
+		}
+		
+		Zone z;
+		for(Request q:requestList) {
+			
+			
+			z=zones.get(q.getZoneId());
+			
+			z.addRequest(q);
+    	
+    	
+    }
+		System.out.println(zoneList);
+		
     }
 }
