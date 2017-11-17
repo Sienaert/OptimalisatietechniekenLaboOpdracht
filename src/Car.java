@@ -7,9 +7,8 @@ public class Car {
     private CarType carType;
     private List<Request> acceptedRequests;
 
-    public Car(int carId, CarType carType) {
+    public Car(int carId) {
         this.carId = carId;
-        this.carType = carType;
         acceptedRequests = new ArrayList<>();
     }
 
@@ -26,7 +25,7 @@ public class Car {
     }
 
     public enum CarType{
-        TYPE1;
+        car0, car1, car2, car3, car4, car5;
     }
 
 	@Override

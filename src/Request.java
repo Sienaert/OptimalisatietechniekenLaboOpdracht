@@ -4,18 +4,17 @@ public class Request implements Comparable{
     private int requestId;
     private int zoneId;
     private int dayIndex, startTime, duration;
-    private List<Car.CarType> possibleVehicleTypes;
+    private List<Car> possibleVehicleTypes;
     private int penalty1, penalty2;
     private boolean redirected;
     private boolean assigned;
 
-    public Request(int requestId, int zoneId, int dayIndex, int startTime, int duration, List<Car.CarType> possibleVehicleTypes, int penalty1, int penalty2) {
+    public Request(int requestId, int zoneId, int dayIndex, int startTime, int duration, int penalty1, int penalty2) {
         this.requestId = requestId;
         this.zoneId = zoneId;
         this.dayIndex = dayIndex;
         this.startTime = startTime;
         this.duration = duration;
-        this.possibleVehicleTypes = possibleVehicleTypes;
         this.penalty1 = penalty1;
         this.penalty2 = penalty2;
         this.redirected = false;
@@ -51,7 +50,7 @@ public class Request implements Comparable{
         return duration;
     }
 
-    public List<Car.CarType> getPossibleVehicleTypes() {
+    public List<Car> getPossibleVehicleTypes() {
         return possibleVehicleTypes;
     }
 
@@ -74,6 +73,10 @@ public class Request implements Comparable{
 	
 	
 
+    public void setPossibleVehicleTypes(List<Car> possibleVehicleTypes) {
+        this.possibleVehicleTypes = possibleVehicleTypes;
+    }
+
 	@Override
 	public String toString() {
 		return "Request [requestId=" + requestId + ", zoneId=" + zoneId + ", dayIndex=" + dayIndex + ", startTime="
@@ -91,6 +94,6 @@ public class Request implements Comparable{
 		}
 		return 1;
 	}
-    
-    
+
+
 }

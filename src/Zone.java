@@ -7,15 +7,15 @@ public class Zone {
     private List<Car> carList;
     private List<Request> requestList;
     private List<Request> redirectedRequestList;
-    private Set<Zone> adjacentZones;
-    
-   
+    private List<Zone> adjacentZones;
     int latestCost=-1;
+
     //TODO: make intervalTree from requests -> to determine overlapping timeframes
 
-    public Zone(int zoneId, Set<Zone> adjacentZones) {
+
+
+    public Zone(int zoneId) {
         this.zoneId = zoneId;
-        this.adjacentZones = adjacentZones;
     }
 
     public int getZoneId() {
@@ -34,29 +34,33 @@ public class Zone {
         return redirectedRequestList;
     }
 
-    public Set<Zone> getAdjacentZones() {
+    public List<Zone> getAdjacentZones() {
         return adjacentZones;
+    }
+
+    public void setAdjacentZones(List<Zone> adjacentZones) {
+        this.adjacentZones = adjacentZones;
     }
 
 	public void addRequest(Request q) {
 		// TODO Auto-generated method stub
 		requestList.add(q);
 	}
-	
+
 	public void setCost(int i) {
 		latestCost=i;
 	}
-	
+
 	public String getAssignmentsString() {
-		
+
 		StringBuilder sb=new StringBuilder("");
-		
+
 		for (Car c:carList) {
 		sb.append(c.getCarId()+";"+zoneId);
 		}
 		return sb.toString();
-		
+
 	}
-	
-	
+
+
 }
