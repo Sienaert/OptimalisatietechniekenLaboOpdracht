@@ -155,7 +155,11 @@ public class Problem {
 				
 				//start optimising
 				
+				//TODO define neigbourghouds +kostencalculatie(zie zone)-->SAnder
+				//TODO implement simulated anealing--> Daan
+				//TODO use implemented to calculated
 				
+				//TODO print to file -->Thomas -->niet hier! method!
 		
     }
 

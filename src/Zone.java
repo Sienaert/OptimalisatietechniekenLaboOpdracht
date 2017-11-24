@@ -9,7 +9,7 @@ public class Zone {
     private List<Request> requestList;
     private List<Request> redirectedRequestList;
     private List<Zone> adjacentZones;
-    int latestCost=-1;
+    int latestCost=Integer.MAX_VALUE;
 
     //TODO: make intervalTree from requests -> to determine overlapping timeframes
 
