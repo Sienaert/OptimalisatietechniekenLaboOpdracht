@@ -26,6 +26,17 @@ public class Zone {
         adjacentZones = new ArrayList<>();
 
     }
+	
+	//deep copy
+	public Zone(Zone z) {
+        this.zoneId = z.zoneId;
+
+        carList = new ArrayList<>(z.getCarList());
+        requestList = new ArrayList<>(z.getRequestList());
+        redirectedRequestList = new ArrayList<>(z.getRedirectedRequestList());
+        adjacentZones = new ArrayList<>(z.getAdjacentZones());
+        latestCost=z.getLatestCost();
+    }
 
     public int getZoneId() {
         return zoneId;
@@ -72,10 +83,17 @@ public class Zone {
 	
 	public void calculateCost() {
 		//TODO implement
-		int result=0;
+		int result=Integer.MAX_VALUE;
+		
+		//use algorithm to place cars
 		
 		
 		
+		//calculate costs
+		
+		
+		
+		//set latest cost
 		latestCost=result;
 	}
 
@@ -85,4 +103,32 @@ public class Zone {
                 "zoneId=" + zoneId +
                 '}';
     }
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + zoneId;
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Zone other = (Zone) obj;
+		if (zoneId != other.zoneId)
+			return false;
+		return true;
+	}
 }
