@@ -9,12 +9,27 @@ public class Zone {
     private List<Request> requestList;
     private List<Request> redirectedRequestList;
     private List<Zone> adjacentZones;
+    boolean changed;
     int latestCost=Integer.MAX_VALUE;
 
     //TODO: make intervalTree from requests -> to determine overlapping timeframes
 
     public int getLatestCost() {
 		return latestCost;
+	}
+
+	/**
+	 * @return the changed
+	 */
+	public boolean isChanged() {
+		return changed;
+	}
+
+	/**
+	 * @param changed the changed to set
+	 */
+	public void setChanged(boolean changed) {
+		this.changed = changed;
 	}
 
 	public Zone(int zoneId) {
@@ -24,6 +39,7 @@ public class Zone {
         requestList = new ArrayList<>();
         redirectedRequestList = new ArrayList<>();
         adjacentZones = new ArrayList<>();
+        changed=false;
 
     }
 	
@@ -36,6 +52,7 @@ public class Zone {
         redirectedRequestList = new ArrayList<>(z.getRedirectedRequestList());
         adjacentZones = new ArrayList<>(z.getAdjacentZones());
         latestCost=z.getLatestCost();
+        this.changed=z.changed;
     }
 
     public int getZoneId() {
@@ -95,6 +112,9 @@ public class Zone {
 		
 		//set latest cost
 		latestCost=result;
+		
+		//set changed
+		changed=false;
 	}
 
     @Override
