@@ -4,11 +4,12 @@ import java.util.*;
 
 public class Problem {
 
-    private List<Request> requestList;
-    private List<Zone> zoneList;
-    private List<Car> carList;
-    private int days;
+    public static List<Request> requestList;
+    public static List<Zone> zoneList;
+    public static List<Car> carList;
+    public static int days;
 
+    public static Random random;
     public Problem(String csvFile) throws IOException{
         requestList = new ArrayList<>();
         zoneList = new ArrayList<>();
@@ -157,7 +158,7 @@ public class Problem {
 				
 				
 				//genereren eerste oplossing
-				Solution s=new Solution(requestList,zoneList,carList,days);
+				Solution s=new Solution();
 			
 				//T=T_max willekeurig gekozen
 				int t=5000;
@@ -169,7 +170,7 @@ public class Problem {
 				
 				int delta;
 				double passChance;
-				Random random=new Random(0);
+				random=new Random(0);
 				double randomNumber;
 				List <Solution>allSolutions=new ArrayList();
 				
@@ -180,7 +181,7 @@ public class Problem {
 					while(iterations<maxIterations) {
 						
 						//generate random neighbour
-						Solution randomSolution=s.getNeighbour(random);
+						Solution randomSolution=s.getNeighbour();
 						
 						 delta=randomSolution.getCost()-s.getCost();
 						if(delta<0) {
@@ -189,6 +190,11 @@ public class Problem {
 							s=randomSolution;
 							//doorgeven aan grafiek
 							allSolutions.add(s);
+							
+							//TODO oplossing doorgeven aan uitprintding
+							//code here
+							
+							
 							
 						}else {
 							//acepteren met probabiliteit
