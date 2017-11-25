@@ -13,7 +13,11 @@ public class Zone {
 
     //TODO: make intervalTree from requests -> to determine overlapping timeframes
 
-    public Zone(int zoneId) {
+    public int getLatestCost() {
+		return latestCost;
+	}
+
+	public Zone(int zoneId) {
         this.zoneId = zoneId;
 
         carList = new ArrayList<>();

@@ -142,25 +142,89 @@ public class Problem {
 		System.out.println(zoneList);
 		
 		
-		//make initial solution
-				z=zones.get(0);
-				List <Car> cl=z.getCarList();
-				cl.addAll(carList);
-				
-				for(Zone zone:zoneList) {	
-					zone.calculateCost();
-				}
-				
+		
 				
 				
 				//start optimising
 				
 				//TODO define neigbourghouds +kostencalculatie(zie zone)-->SAnder
 				//TODO implement simulated anealing--> Daan
-				//TODO use implemented to calculated
-				
+				//TODO use implemented to calculated				
 				//TODO print to file -->Thomas -->niet hier! method!
 		
+				
+				//--> simulated anealing
+				
+				
+				//genereren eerste oplossing
+				Solution s=new Solution(requestList,zoneList,carList,days);
+			
+				//T=T_max willekeurig gekozen
+				int t=5000;
+				
+				int iterations=0;
+				
+				//willekeurig gekozen
+				int maxIterations=1000;
+				
+				int delta;
+				double passChance;
+				Random random=new Random(0);
+				double randomNumber;
+				List <Solution>allSolutions=new ArrayList();
+				
+				
+				//willekeurig gekozen
+				while(t>1000) {
+					
+					while(iterations<maxIterations) {
+						
+						//generate random neighbour
+						Solution randomSolution=s.getNeighbour(random);
+						
+						 delta=randomSolution.getCost()-s.getCost();
+						if(delta<0) {
+							
+							
+							s=randomSolution;
+							//doorgeven aan grafiek
+							allSolutions.add(s);
+							
+						}else {
+							//acepteren met probabiliteit
+							
+							
+							passChance=Math.exp(((float)delta)/((float)t));
+							randomNumber=random.nextDouble();
+							
+							if(randomNumber>=passChance) {
+								
+								s=randomSolution;
+								
+								//doorgeven aan grafiek
+								allSolutions.add(s);
+								
+							}
+							
+							
+							
+						}
+						
+						
+						
+						
+						
+						
+						iterations++;
+					}
+					
+					
+					t--;
+					iterations=0;
+					
+				}
+				
+				
     }
 
 
