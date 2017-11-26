@@ -7,6 +7,8 @@ public class Test {
 
 		try {
 			problem = new Problem("toy1.csv");
+			
+			problem.solve();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
