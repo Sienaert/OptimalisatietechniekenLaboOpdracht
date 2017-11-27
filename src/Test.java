@@ -13,8 +13,6 @@ public class Test {
 			e.printStackTrace();
 		}
 
-		System.out.println(problem.toString());
-
 	}
 
 }

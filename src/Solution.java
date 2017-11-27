@@ -10,25 +10,23 @@ public class Solution {
 		//make initial solution
 		
 		
-		zones=new ArrayList<Zone>();
+		zones=new ArrayList<>();
 		
 		//add zones to zones
-		for(Zone zone:Problem.zoneList) {	
-			zones.add(new Zone(zone));
+		for(Zone zone:Problem.zoneList) {
+			zones.add(zone);
 		}
 		
 		//add all cars to 1 zone
-		Zone z=Problem.zoneList.get(0);
-		List <Car> cl=z.getCarList();
-		cl.addAll(Problem.carList);
+		Zone z = zones.get(0);
+		z.setCarList(Problem.carList);
 		
 		cost=0;
 		for(Zone zone:zones) {	
 			zone.calculateCost();
 			cost=cost+zone.getLatestCost();
 		}
-		
-		
+
 	}
 
 	/**
@@ -46,7 +44,15 @@ public class Solution {
 	}
 
 	public int getCost() {
-		// TODO Auto-generated method stub
+		int tempCost = 0;
+
+		for(Zone zone : zones){
+			zone.calculateCost();
+			tempCost+=zone.getLatestCost();
+		}
+
+		cost = tempCost;
+
 		return cost;
 	}
 
@@ -95,6 +101,7 @@ public class Solution {
 		
 		//pick zone A --> needs at least 1 car (see code above)
 		
+
 		int a=Problem.random.nextInt(AZones.size());
 		
 		Zone AZone=AZones.get(a);
@@ -143,5 +150,11 @@ public class Solution {
 		
 	}
 
-	
+	@Override
+	public String toString() {
+		return "Solution{" +
+				"cost=" + cost +
+				", zones=" + zones +
+				'}';
+	}
 }

@@ -141,9 +141,10 @@ public class Problem {
 		// --> simulated anealing
 
 		// genereren eerste oplossing
-		Solution s = new Solution();
+		Solution currentSolution = new Solution();
 		
 		Solution randomSolution;
+		Solution bestSolution = currentSolution;
 
 		// T=T_max willekeurig gekozen
 		int t = 5000;
@@ -165,19 +166,20 @@ public class Problem {
 			while (iterations < maxIterations) {
 
 				// generate random neighbour
-				randomSolution = s.getNeighbour();
+				randomSolution = currentSolution.getNeighbour();
 
-				delta = randomSolution.getCost() - s.getCost();
+				delta = randomSolution.getCost() - currentSolution.getCost();
 				if (delta < 0) {
 
-					s = randomSolution;
+					currentSolution = randomSolution;
 					// doorgeven aan grafiek
-					allSolutions.add(s);
+					allSolutions.add(currentSolution);
 
 					// TODO oplossing doorgeven aan uitprintding
 					// code hier --> MOET blocking zijn anders problemen.
-					
-					
+
+					//Beste oplossing bijhouden
+					bestSolution = currentSolution;
 					
 
 				} else {
@@ -188,10 +190,10 @@ public class Problem {
 
 					if (randomNumber >= passChance) {
 
-						s = randomSolution;
+						currentSolution = randomSolution;
 
 						// doorgeven aan grafiek
-						allSolutions.add(s);
+						allSolutions.add(currentSolution);
 
 					}
 
@@ -207,6 +209,8 @@ public class Problem {
 			// dalen/stijgen
 
 		}
+
+		System.out.println("Best solution: "+bestSolution.toString());
 
 	}
 

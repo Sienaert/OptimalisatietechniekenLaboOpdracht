@@ -18,6 +18,10 @@ public class Zone {
 		return latestCost;
 	}
 
+	public void setCarList(List<Car> carList) {
+		this.carList = carList;
+	}
+
 	/**
 	 * @return the changed
 	 */
@@ -100,14 +104,21 @@ public class Zone {
 	
 	public void calculateCost() {
 		//TODO implement
-		int result=Integer.MAX_VALUE;
-		
+		int result=0;
+
 		//use algorithm to place cars
 		
 		
 		
 		//calculate costs
-		
+		for(Request request : requestList){
+		    if(request.isRedirected()){
+		        result += request.getPenalty2();
+            }
+            else if(!request.isAssigned()){
+		        result += request.getPenalty1();
+            }
+        }
 		
 		
 		//set latest cost
