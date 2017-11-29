@@ -7,7 +7,6 @@ public class Zone {
     private int zoneId;
     private List<Car> carList;
     private List<Request> requestList;
-    private List<Request> redirectedRequestList;
     private List<Zone> adjacentZones;
     boolean changed;
     int latestCost=Integer.MAX_VALUE;
@@ -41,7 +40,6 @@ public class Zone {
 
         carList = new ArrayList<>();
         requestList = new ArrayList<>();
-        redirectedRequestList = new ArrayList<>();
         adjacentZones = new ArrayList<>();
         changed=false;
 
@@ -52,8 +50,10 @@ public class Zone {
         this.zoneId = z.zoneId;
 
         carList = new ArrayList<>(z.getCarList());
+        //Refresh each car usage
+		for(Car car : carList) car.setTimeUsed(new IntervalTree());
+
         requestList = new ArrayList<>(z.getRequestList());
-        redirectedRequestList = new ArrayList<>(z.getRedirectedRequestList());
         adjacentZones = new ArrayList<>(z.getAdjacentZones());
         latestCost=z.getLatestCost();
         this.changed=z.changed;
@@ -69,10 +69,6 @@ public class Zone {
 
     public List<Request> getRequestList() {
         return requestList;
-    }
-
-    public List<Request> getRedirectedRequestList() {
-        return redirectedRequestList;
     }
 
     public List<Zone> getAdjacentZones() {
@@ -99,6 +95,82 @@ public class Zone {
 		}
 		return sb.toString();
 
+	}
+
+	public void handleRequests(){
+		for(Request request : requestList){
+			//Check if a possible car is in current zone
+			List<Car> possibleCars = request.getPossibleVehicleTypes();
+
+			boolean requestIsBeingProcessed = true;
+			int i = 0;
+
+			while(requestIsBeingProcessed && i<possibleCars.size()){
+				Car car = possibleCars.get(i);
+
+				//If requested car is in current zone
+				if(carList.contains(car)){
+					//Try to assign car to request
+					if(car.assignCar(request)){
+						//If assigned successful, break out of while-loop and handle next request
+						request.setAssigned(true);
+						requestIsBeingProcessed = false;
+					}
+				}
+
+				//Try next possible car
+				i++;
+			}
+
+			//If no car found, request is still being processed
+			if(requestIsBeingProcessed){
+				//Push request to each neighbour => return boolean if handled
+				for(Zone adjacentZone : adjacentZones){
+					//If adjacent zone can handle the request, end loop
+					if(adjacentZone.handleRedirectedRequest(request)){
+						request.setRedirected(true);
+						requestIsBeingProcessed = false;
+						break;
+					}
+				}
+			}
+
+			//Still no luck, request not assigned
+			if(requestIsBeingProcessed){
+				request.setAssigned(false);
+			}
+
+
+
+
+			//If (not) handled, set redirected
+		}
+	}
+
+	public boolean handleRedirectedRequest(Request redirectedRequest){
+		List<Car> possibleCars = redirectedRequest.getPossibleVehicleTypes();
+
+		boolean requestIsBeingProcessed = true;
+		int i = 0;
+
+		while(requestIsBeingProcessed && i<possibleCars.size()){
+			Car car = possibleCars.get(i);
+
+			//If requested car is in current zone
+			if(carList.contains(car)){
+				//Try to assign car to request
+				if(car.assignCar(redirectedRequest)){
+					//If assigned successful, break out of while-loop and handle next request
+					redirectedRequest.setAssigned(true);
+					requestIsBeingProcessed = false;
+				}
+			}
+
+			//Try next possible car
+			i++;
+		}
+
+		return !requestIsBeingProcessed;
 	}
 	
 	

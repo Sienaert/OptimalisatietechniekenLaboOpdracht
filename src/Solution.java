@@ -20,6 +20,9 @@ public class Solution {
 		//add all cars to 1 zone
 		Zone z = zones.get(0);
 		z.setCarList(Problem.carList);
+
+		//Handle requests in initial zone
+		z.handleRequests();
 		
 		cost=0;
 		for(Zone zone:zones) {	
@@ -78,7 +81,9 @@ public class Solution {
 		//use Problem.random!
 		//neighbour has one car moved from one zone to another
 		//method is not allowed to alter parameters from the this object!--> only parameters from neighbour should be altered.
-		
+
+
+		//Added car usage refreshment with each new solution
 		Solution neighbour=new Solution(this);
 		
 		//pick 2 zones 
@@ -131,6 +136,11 @@ public class Solution {
 		BZone.calculateCost();
 		
 		//add costs to total
+
+		//Handle all requests in each zone
+		for(Zone zone : neighbour.zones){
+			zone.handleRequests();
+		}
 		
 		neighbour.calculateCost();
 		
@@ -156,5 +166,12 @@ public class Solution {
 				"cost=" + cost +
 				", zones=" + zones +
 				'}';
+	}
+
+	public void assignRequests(){
+		for(Zone zone : zones){
+
+		}
+
 	}
 }

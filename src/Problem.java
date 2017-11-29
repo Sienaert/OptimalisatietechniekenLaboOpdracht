@@ -97,6 +97,14 @@ public class Problem {
 
 		}
 
+		//Place all requests in corresponding zone
+		for(Zone zone : zoneList){
+			for (Request request : requestList){
+				if(request.getZone() == zone)
+					zone.addRequest(request);
+			}
+		}
+
 	}
 
 	public List<Request> getRequestList() {
@@ -180,6 +188,8 @@ public class Problem {
 
 					//Beste oplossing bijhouden
 					bestSolution = currentSolution;
+
+					System.out.println("New best solution: " + bestSolution.getCost());
 					
 
 				} else {
