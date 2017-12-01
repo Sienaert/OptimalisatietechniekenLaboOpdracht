@@ -1,16 +1,16 @@
 import java.util.List;
 
-public class Request implements Comparable{
-    private int requestId;
+public class Request{
+    private String requestId;
     private Zone zone;
     private int dayIndex, startTime, duration;
     private List<Car> possibleVehicleTypes;
     private int penalty1, penalty2;
     private boolean redirected;
     private boolean assigned;
-	private int carID;
+	private String carID;
 
-    public Request(int requestId, int dayIndex, int startTime, int duration, int penalty1, int penalty2) {
+    public Request(String requestId, int dayIndex, int startTime, int duration, int penalty1, int penalty2) {
         this.requestId = requestId;
         this.dayIndex = dayIndex;
         this.startTime = startTime;
@@ -29,9 +29,8 @@ public class Request implements Comparable{
         this.redirected = redirected;
     }
 
-    public int getRequestId() {
+    public String getRequestId() {
         return requestId;
-
     }
 
     public int getDayIndex() {
@@ -100,11 +99,11 @@ public class Request implements Comparable{
     }
     
     
-	public int getCarID() {
+	public String getCarID() {
 		return carID;
 	}
 
-	public void setCarID(int carID) {
+	public void setCarID(String carID) {
 		this.carID = carID;
 	}
 
@@ -116,15 +115,7 @@ public class Request implements Comparable{
 				+ assigned + "]";
 	}
 
-	@Override
-	public int compareTo(Object arg0) {
-		// TODO Auto-generated method stub
-		int result;
-		if(assigned) {
-			return -1;
-		}
-		return 1;
-	}
+
 	
 	
 

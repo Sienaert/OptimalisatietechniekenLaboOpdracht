@@ -4,7 +4,7 @@ import java.util.Set;
 
 public class Zone {
 
-    private int zoneId;
+    private String zoneId;
     private List<Car> carList;
     private List<Request> requestList;
     private List<Zone> adjacentZones;
@@ -35,7 +35,7 @@ public class Zone {
 		this.changed = changed;
 	}
 
-	public Zone(int zoneId) {
+	public Zone(String zoneId) {
         this.zoneId = zoneId;
 
         carList = new ArrayList<>();
@@ -59,9 +59,6 @@ public class Zone {
         this.changed=z.changed;
     }
 
-    public int getZoneId() {
-        return zoneId;
-    }
 
     public List<Car> getCarList() {
         return carList;
@@ -212,28 +209,27 @@ public class Zone {
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + zoneId;
-		return result;
+
+	public String getZoneId() {
+		return zoneId;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Zone other = (Zone) obj;
-		if (zoneId != other.zoneId)
-			return false;
-		return true;
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Zone zone = (Zone) o;
+
+		return zoneId.equals(zone.zoneId);
+	}
+
+	@Override
+	public int hashCode() {
+		return zoneId.hashCode();
+	}
+
+	public void addAdjacentZone(Zone zone){
+		adjacentZones.add(zone);
 	}
 }

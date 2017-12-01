@@ -10,8 +10,10 @@ public class Problem {
 	public static int days;
 
 	public static Random random;
+	private Printer printer;
 
 	public Problem(String csvFile) throws IOException {
+		printer = new Printer();
 		requestList = new ArrayList<>();
 		zoneList = new ArrayList<>();
 		carList = new ArrayList<>();
@@ -44,7 +46,7 @@ public class Problem {
 				String possibleCars = request[5];
 				carMap.add(possibleCars);
 
-				Request newRequest = new Request(requestId, Integer.parseInt(request[2]), Integer.parseInt(request[3]),
+				Request newRequest = new Request(request[0], Integer.parseInt(request[2]), Integer.parseInt(request[3]),
 						Integer.parseInt(request[4]), Integer.parseInt(request[request.length - 2]),
 						Integer.parseInt(request[request.length - 1]));
 				requestList.add(newRequest);
@@ -54,28 +56,27 @@ public class Problem {
 			int numberOfZones = Integer.parseInt(br.readLine().split(" ")[1]);
 
 			for (int zoneId = 0; zoneId < numberOfZones; zoneId++) {
-				zoneList.add(new Zone(zoneId));
-			}
-
-			for (Zone zone : zoneList) {
 				line = br.readLine();
 				String[] zoneStr = line.split(cvsSplitBy);
 
-				List<Zone> adjacentZones = new ArrayList<>();
 
-				for (int i = 1; i < zoneStr.length; i++) {
-					adjacentZones.add(zoneList.get(i));
+				zoneList.add(new Zone(zoneStr[0]));
+
+
+				String[] adjacentString = zoneStr[1].split(",");
+
+				for (String adjacentZone : adjacentString) {
+					zoneList.get(zoneId).addAdjacentZone(new Zone(adjacentZone));
 				}
-
-				zone.setAdjacentZones(adjacentZones);
 			}
+
 
 			// Read Cars
 			int numberOfCars = Integer.parseInt(br.readLine().split(" ")[1]);
 
 			for (int i = 0; i < numberOfCars; i++) {
 				line = br.readLine();
-				carList.add(new Car(Integer.parseInt(line.substring(line.length() - 1))));
+				carList.add(new Car(line));
 			}
 
 			// Read Days
@@ -84,7 +85,7 @@ public class Problem {
 			// Fix car links in requests
 			for (Request request : requestList) {
 				List<Car> localCarList = new ArrayList<>();
-				String possibleCars = carMap.get(request.getRequestId());
+				String possibleCars = carMap.get(Integer.parseInt(request.getRequestId().substring(3)));
 				String[] cars = possibleCars.split(",");
 				for (String carString : cars) {
 					localCarList.add(carList.get(Integer.parseInt(carString.substring(carString.length() - 1))));
@@ -124,15 +125,7 @@ public class Problem {
 
 	}
 
-	public void solve() {
-
-		// adding request to zones
-		Map<Integer, Zone> zones = new <Integer, Zone>HashMap();
-		for (Zone z : zoneList) {
-
-			zones.put(z.getZoneId(), z);
-
-		}
+	public void solve() throws IOException {
 
 		Zone z;
 		for (Request q : requestList) {
@@ -221,7 +214,7 @@ public class Problem {
 		}
 
 		System.out.println("Best solution: "+bestSolution.toString());
-
+		printer.GenerateOutput(bestSolution);
 	}
 
 	@Override

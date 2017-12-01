@@ -3,21 +3,21 @@ import java.util.List;
 
 public class Car {
 
-    private int carId;
+    private String carId;
     private List<Request> acceptedRequests;
     private IntervalTree timeUsed;
 
-    public Car(int carId) {
+    public Car(String carId) {
         this.carId = carId;
         acceptedRequests = new ArrayList<>();
         timeUsed = new IntervalTree();
     }
 
-    public int getCarId() {
-        return carId;
-    }
+	public String getCarId() {
+		return carId;
+	}
 
-    public List<Request> getAcceptedRequests() {
+	public List<Request> getAcceptedRequests() {
         return acceptedRequests;
     }
 
@@ -27,25 +27,18 @@ public class Car {
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + carId;
-		return result;
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Car car = (Car) o;
+
+		return carId.equals(car.carId);
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Car other = (Car) obj;
-		if (carId != other.carId)
-			return false;
-		return true;
+	public int hashCode() {
+		return carId.hashCode();
 	}
 
 	//Currently unused
