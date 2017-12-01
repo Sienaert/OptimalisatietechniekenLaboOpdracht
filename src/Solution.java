@@ -131,17 +131,35 @@ public class Solution {
 		//remove old costs from total
 		cost=cost-AZone.getLatestCost()-BZone.getLatestCost();
 		
+		
+		
 		//calculate new costs
-		AZone.calculateCost();
-		BZone.calculateCost();
+		AZone.setChanged(true);
+		BZone.setChanged(true);
+		
+		
+		
+		//aanpassen-->efficientie
+		//Handle all requests in each zone
+		for(Zone zone : neighbour.zones){
+					zone.handleRequests();
+				}
+				
+		
+		
+		for(Zone zone:zones) {
+			
+			//if(zone.isChanged()) {
+				
+				zone.calculateCost();
+			//}
+			
+		}
+		
+		
 		
 		//add costs to total
 
-		//Handle all requests in each zone
-		for(Zone zone : neighbour.zones){
-			zone.handleRequests();
-		}
-		
 		neighbour.calculateCost();
 		
 		

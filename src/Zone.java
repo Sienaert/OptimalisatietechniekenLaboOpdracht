@@ -129,6 +129,7 @@ public class Zone {
 				for(Zone adjacentZone : adjacentZones){
 					//If adjacent zone can handle the request, end loop
 					if(adjacentZone.handleRedirectedRequest(request)){
+						adjacentZone.setChanged(true);
 						request.setRedirected(true);
 						requestIsBeingProcessed = false;
 						break;
@@ -219,6 +220,9 @@ public class Zone {
 		result = prime * result + zoneId;
 		return result;
 	}
+	
+	
+	
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
