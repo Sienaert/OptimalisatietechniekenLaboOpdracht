@@ -125,7 +125,8 @@ public class Problem {
 	}
 
 	public void solve() {
-
+		List<Integer> allSolutions = new ArrayList<Integer>();
+		List<Long> timeForSolution=new ArrayList<Long>();
 		// adding request to zones
 		Map<Integer, Zone> zones = new <Integer, Zone>HashMap();
 		for (Zone z : zoneList) {
@@ -166,7 +167,10 @@ public class Problem {
 		double passChance;
 		random = new Random(0);
 		double randomNumber;
-		List<Solution> allSolutions = new ArrayList();
+		
+		
+		
+		Long start=System.currentTimeMillis();
 
 		// willekeurig gekozen
 		while (t > 1000) {
@@ -177,11 +181,12 @@ public class Problem {
 				randomSolution = currentSolution.getNeighbour();
 
 				delta = randomSolution.getCost() - currentSolution.getCost();
-				if (delta < 0) {
+				if (delta > 0) {
 
 					currentSolution = randomSolution;
 					// doorgeven aan grafiek
-					allSolutions.add(currentSolution);
+					allSolutions.add(currentSolution.getCost());
+					timeForSolution.add(System.currentTimeMillis());
 
 					// TODO oplossing doorgeven aan uitprintding
 					// code hier --> MOET blocking zijn anders problemen.
@@ -203,7 +208,8 @@ public class Problem {
 						currentSolution = randomSolution;
 
 						// doorgeven aan grafiek
-						allSolutions.add(currentSolution);
+						allSolutions.add(currentSolution.getCost());
+						timeForSolution.add(System.currentTimeMillis());
 
 					}
 
@@ -221,8 +227,41 @@ public class Problem {
 		}
 
 		System.out.println("Best solution: "+bestSolution.toString());
-
+		
+		
+		for(int i=0;i<timeForSolution.size();i++) {
+			
+			
+			timeForSolution.set(i, timeForSolution.get(i)-start);
+			
+			
+		}
+		
+		StringBuilder sb=new StringBuilder("");
+		
+		for(int i=0;i<allSolutions.size();i++) {
+			
+			sb.append(timeForSolution.get(i)+";"+allSolutions.get(i)+"\n");
+			
+		
+		
+		}
+		
+		
+		System.out.println(allSolutions);
+		System.out.println(timeForSolution);
+		
+		try(  PrintWriter out = new PrintWriter( "graph.csv" )  ){
+		    out.println( sb.toString() );
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
+	
+	
 
 	@Override
 	public String toString() {
