@@ -12,210 +12,250 @@ public class Problem {
 	public static Random random;
 	private Printer printer;
 
-	public Problem(String csvFile) throws IOException {
-		printer = new Printer();
-		requestList = new ArrayList<>();
-		zoneList = new ArrayList<>();
-		carList = new ArrayList<>();
+    public Problem(String csvFile) throws IOException {
+        printer = new Printer();
+        requestList = new ArrayList<>();
+        zoneList = new ArrayList<>();
+        carList = new ArrayList<>();
 
-		String line;
-		String cvsSplitBy = ";";
+        String line;
+        String cvsSplitBy = ";";
 
-		// Make map of requestID and possiblecars to fix after
-		List<String> carMap = new ArrayList<>();
+        // Make map of requestID and possiblecars to fix after
+        List<String> carMap = new ArrayList<>();
 
-		// And for ZoneID..
-		int[] zoneIDs;
+        // And for ZoneID..
+        int[] zoneIDs;
 
-		try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
 
-			// Read Requests
-			int numberOfRequests = Integer.parseInt(br.readLine().split(" ")[1]);
+            // Read Requests
+            int numberOfRequests = Integer.parseInt(br.readLine().split(" ")[1]);
 
-			zoneIDs = new int[numberOfRequests];
+            zoneIDs = new int[numberOfRequests];
 
-			for (int requestId = 0; requestId < numberOfRequests; requestId++) {
-				line = br.readLine();
-				String[] request = line.split(cvsSplitBy);
+            for (int requestId = 0; requestId < numberOfRequests; requestId++) {
+                line = br.readLine();
+                String[] request = line.split(cvsSplitBy);
 
-				// Fix zones
-				int zoneId = Integer.parseInt(request[1].substring(1));
-				zoneIDs[requestId] = zoneId;
+                // Fix zones
+                int zoneId = Integer.parseInt(request[1].substring(1));
+                zoneIDs[requestId] = zoneId;
 
-				// Fix links
-				String possibleCars = request[5];
-				carMap.add(possibleCars);
+                // Fix links
+                String possibleCars = request[5];
+                carMap.add(possibleCars);
 
-				Request newRequest = new Request(request[0], Integer.parseInt(request[2]), Integer.parseInt(request[3]),
-						Integer.parseInt(request[4]), Integer.parseInt(request[request.length - 2]),
-						Integer.parseInt(request[request.length - 1]));
-				requestList.add(newRequest);
-			}
+                Request newRequest = new Request(request[0], Integer.parseInt(request[2]), Integer.parseInt(request[3]),
+                        Integer.parseInt(request[4]), Integer.parseInt(request[request.length - 2]),
+                        Integer.parseInt(request[request.length - 1]));
+                requestList.add(newRequest);
+            }
 
-			// Read Zones
-			int numberOfZones = Integer.parseInt(br.readLine().split(" ")[1]);
+            // Read Zones
+            int numberOfZones = Integer.parseInt(br.readLine().split(" ")[1]);
 
-			for (int zoneId = 0; zoneId < numberOfZones; zoneId++) {
-				line = br.readLine();
-				String[] zoneStr = line.split(cvsSplitBy);
-
-
-				zoneList.add(new Zone(zoneStr[0]));
+            for (int zoneId = 0; zoneId < numberOfZones; zoneId++) {
+                line = br.readLine();
+                String[] zoneStr = line.split(cvsSplitBy);
 
 
-				String[] adjacentString = zoneStr[1].split(",");
-
-				for (String adjacentZone : adjacentString) {
-					zoneList.get(zoneId).addAdjacentZone(new Zone(adjacentZone));
-				}
-			}
+                zoneList.add(new Zone(zoneStr[0]));
 
 
-			// Read Cars
-			int numberOfCars = Integer.parseInt(br.readLine().split(" ")[1]);
+                String[] adjacentString = zoneStr[1].split(",");
 
-			for (int i = 0; i < numberOfCars; i++) {
-				line = br.readLine();
-				carList.add(new Car(line));
-			}
+                for (String adjacentZone : adjacentString) {
+                    zoneList.get(zoneId).addAdjacentZone(new Zone(adjacentZone));
+                }
+            }
 
-			// Read Days
-			days = Integer.parseInt(br.readLine().split(" ")[1]);
 
-			// Fix car links in requests
-			for (Request request : requestList) {
-				List<Car> localCarList = new ArrayList<>();
-				String possibleCars = carMap.get(Integer.parseInt(request.getRequestId().substring(3)));
-				String[] cars = possibleCars.split(",");
-				for (String carString : cars) {
-					localCarList.add(carList.get(Integer.parseInt(carString.substring(carString.length() - 1))));
-				}
-				request.setPossibleVehicleTypes(localCarList);
+            // Read Cars
+            int numberOfCars = Integer.parseInt(br.readLine().split(" ")[1]);
 
-				// Fix zoneID in request
-				request.setZone(zoneList.get(zoneIDs[requestList.indexOf(request)]));
-			}
+            for (int i = 0; i < numberOfCars; i++) {
+                line = br.readLine();
+                carList.add(new Car(line));
+            }
 
-		}
+            // Read Days
+            days = Integer.parseInt(br.readLine().split(" ")[1]);
 
-		//Place all requests in corresponding zone
-		for(Zone zone : zoneList){
-			for (Request request : requestList){
-				if(request.getZone() == zone)
-					zone.addRequest(request);
-			}
-		}
+            // Fix car links in requests
+            for (Request request : requestList) {
+                List<Car> localCarList = new ArrayList<>();
+                String possibleCars = carMap.get(Integer.parseInt(request.getRequestId().substring(3)));
+                String[] cars = possibleCars.split(",");
+                for (String carString : cars) {
+                    localCarList.add(carList.get(Integer.parseInt(carString.substring(carString.length() - 1))));
+                }
+                request.setPossibleVehicleTypes(localCarList);
 
-	}
+                // Fix zoneID in request
+                request.setZone(zoneList.get(zoneIDs[requestList.indexOf(request)]));
+            }
 
-	public List<Request> getRequestList() {
-		return requestList;
-	}
+        }
 
-	public List<Zone> getZoneList() {
-		return zoneList;
-	}
+        //Place all requests in corresponding zone
+        for(Zone zone : zoneList){
+            for (Request request : requestList){
+                if(request.getZone() == zone)
+                    zone.addRequest(request);
+            }
+        }
 
-	public List<Car> getCarList() {
-		return carList;
-	}
+    }
 
-	public int getDays() {
-		return days;
+    public List<Request> getRequestList() {
+        return requestList;
+    }
 
-	}
+    public List<Zone> getZoneList() {
+        return zoneList;
+    }
 
-	public void solve() throws IOException {
+    public List<Car> getCarList() {
+        return carList;
+    }
 
-		Zone z;
-		for (Request q : requestList) {
+    public int getDays() {
+        return days;
 
-			z = q.getZone();
+    }
 
-			z.addRequest(q);
+    public void solve() throws IOException{
+        List<Integer> allSolutions = new ArrayList<Integer>();
+        List<Long> timeForSolution = new ArrayList<Long>();
 
-		}
-		System.out.println(zoneList);
+        Zone z;
+        for (Request q : requestList) {
 
-		// start optimising
+            z = q.getZone();
 
-		// --> simulated anealing
+            z.addRequest(q);
 
-		// genereren eerste oplossing
-		Solution currentSolution = new Solution();
-		
-		Solution randomSolution;
-		Solution bestSolution = currentSolution;
+        }
+        System.out.println(zoneList);
 
-		// T=T_max willekeurig gekozen
-		int t = 5000;
+        // start optimising
 
-		int iterations = 0;
+        // --> simulated anealing
 
-		// willekeurig gekozen
-		int maxIterations = 1000;
+        // genereren eerste oplossing
+        Solution currentSolution = new Solution();
 
-		int delta;
-		double passChance;
-		random = new Random(0);
-		double randomNumber;
-		List<Solution> allSolutions = new ArrayList();
+        Solution randomSolution;
+        Solution bestSolution = currentSolution;
 
-		// willekeurig gekozen
-		while (t > 1000) {
+        // T=T_max willekeurig gekozen
+        int t = 5000;
 
-			while (iterations < maxIterations) {
+        int iterations = 0;
 
-				// generate random neighbour
-				randomSolution = currentSolution.getNeighbour();
+        // willekeurig gekozen
+        int maxIterations = 1000;
 
-				delta = randomSolution.getCost() - currentSolution.getCost();
-				if (delta < 0) {
+        int delta;
+        double passChance;
+        random = new Random(0);
+        double randomNumber;
 
-					currentSolution = randomSolution;
-					// doorgeven aan grafiek
-					allSolutions.add(currentSolution);
 
-					// TODO oplossing doorgeven aan uitprintding
-					// code hier --> MOET blocking zijn anders problemen.
+        Long start = System.currentTimeMillis();
 
-					//Beste oplossing bijhouden
-					bestSolution = currentSolution;
+        // willekeurig gekozen
+        while (t > 1000) {
 
-					System.out.println("New best solution: " + bestSolution.getCost());
-					
+            while (iterations < maxIterations) {
 
-				} else {
-					// acepteren met probabiliteit
+                // generate random neighbour
+                randomSolution = currentSolution.getNeighbour();
 
-					passChance = Math.exp(((float) delta) / ((float) t));
-					randomNumber = random.nextDouble();
+                delta = randomSolution.getCost() - currentSolution.getCost();
+                if (delta > 0) {
 
-					if (randomNumber >= passChance) {
+                    currentSolution = randomSolution;
+                    // doorgeven aan grafiek
+                    allSolutions.add(currentSolution.getCost());
+                    timeForSolution.add(System.currentTimeMillis());
 
-						currentSolution = randomSolution;
+                    // TODO oplossing doorgeven aan uitprintding
+                    // code hier --> MOET blocking zijn anders problemen.
 
-						// doorgeven aan grafiek
-						allSolutions.add(currentSolution);
+                    //Beste oplossing bijhouden
+                    bestSolution = currentSolution;
 
-					}
+                    System.out.println("New best solution: " + bestSolution.getCost());
 
-				}
 
-				iterations++;
-			}
+                } else {
+                    // acepteren met probabiliteit
 
-			// eventueel: t met functie laten dalen
-			t--;
-			iterations = 0;
-			// eventueel: maxiterations kunnen we in functie van de temperatuur laten
-			// dalen/stijgen
+                    passChance = Math.exp(((float) delta) / ((float) t));
+                    randomNumber = random.nextDouble();
 
-		}
+                    if (randomNumber >= passChance) {
 
-		System.out.println("Best solution: "+bestSolution.toString());
-		printer.GenerateOutput(bestSolution);
-	}
+                        currentSolution = randomSolution;
+
+                        // doorgeven aan grafiek
+                        allSolutions.add(currentSolution.getCost());
+                        timeForSolution.add(System.currentTimeMillis());
+
+                    }
+
+                }
+
+                iterations++;
+            }
+
+            // eventueel: t met functie laten dalen
+            t--;
+            iterations = 0;
+            // eventueel: maxiterations kunnen we in functie van de temperatuur laten
+            // dalen/stijgen
+
+        }
+
+        System.out.println("Best solution: " + bestSolution.toString());
+
+
+        for (int i = 0; i < timeForSolution.size(); i++) {
+
+
+            timeForSolution.set(i, timeForSolution.get(i) - start);
+
+
+        }
+
+        StringBuilder sb = new StringBuilder("");
+
+        for (int i = 0; i < allSolutions.size(); i++) {
+
+            sb.append(timeForSolution.get(i) + ";" + allSolutions.get(i) + "\n");
+
+
+        }
+
+
+        System.out.println(allSolutions);
+        System.out.println(timeForSolution);
+
+        try (PrintWriter out = new PrintWriter("graph.csv")) {
+            out.println(sb.toString());
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        System.out.println("Best solution: " + bestSolution.toString());
+        printer.GenerateOutput(bestSolution);
+
+
+
+    }
 
 	@Override
 	public String toString() {

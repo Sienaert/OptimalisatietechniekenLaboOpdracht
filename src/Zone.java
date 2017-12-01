@@ -126,6 +126,7 @@ public class Zone {
 				for(Zone adjacentZone : adjacentZones){
 					//If adjacent zone can handle the request, end loop
 					if(adjacentZone.handleRedirectedRequest(request)){
+						adjacentZone.setChanged(true);
 						request.setRedirected(true);
 						requestIsBeingProcessed = false;
 						break;
@@ -223,6 +224,9 @@ public class Zone {
 
 		return zoneId.equals(zone.zoneId);
 	}
+	
+	
+	
 
 	@Override
 	public int hashCode() {
