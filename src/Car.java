@@ -4,12 +4,10 @@ import java.util.List;
 public class Car {
 
     private String carId;
-    private List<Request> acceptedRequests;
     private IntervalTree timeUsed;
 
     public Car(String carId) {
         this.carId = carId;
-        acceptedRequests = new ArrayList<>();
         timeUsed = new IntervalTree();
     }
 
@@ -17,13 +15,10 @@ public class Car {
 		return carId;
 	}
 
-	public List<Request> getAcceptedRequests() {
-        return acceptedRequests;
-    }
 
 	@Override
 	public String toString() {
-		return "Car [carId=" + carId + ", acceptedRequests=" + acceptedRequests + "]";
+		return "Car [carId=" + carId + "]";
 	}
 
 	@Override

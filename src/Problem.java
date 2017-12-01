@@ -128,16 +128,8 @@ public class Problem {
     public void solve() throws IOException{
         List<Integer> allSolutions = new ArrayList<Integer>();
         List<Long> timeForSolution = new ArrayList<Long>();
-
-        Zone z;
-        for (Request q : requestList) {
-
-            z = q.getZone();
-
-            z.addRequest(q);
-
-        }
-        System.out.println(zoneList);
+        random = new Random(0);
+        int counter = 0;
 
         // start optimising
 
@@ -146,7 +138,7 @@ public class Problem {
         // genereren eerste oplossing
         Solution currentSolution = new Solution();
 
-        Solution randomSolution;
+        System.out.println("Initial solution costs: " + currentSolution.getCost());
         Solution bestSolution = currentSolution;
 
         // T=T_max willekeurig gekozen
@@ -159,7 +151,6 @@ public class Problem {
 
         int delta;
         double passChance;
-        random = new Random(0);
         double randomNumber;
 
 
@@ -171,10 +162,15 @@ public class Problem {
             while (iterations < maxIterations) {
 
                 // generate random neighbour
-                randomSolution = currentSolution.getNeighbour();
+                Solution randomSolution = currentSolution.getNeighbour();
+
+
+                randomSolution.calculateCost();
+                currentSolution.calculateCost();
+
 
                 delta = randomSolution.getCost() - currentSolution.getCost();
-                if (delta > 0) {
+                if (delta <= 0) {
 
                     currentSolution = randomSolution;
                     // doorgeven aan grafiek
@@ -185,9 +181,6 @@ public class Problem {
                     // code hier --> MOET blocking zijn anders problemen.
 
                     //Beste oplossing bijhouden
-                    bestSolution = currentSolution;
-
-                    System.out.println("New best solution: " + bestSolution.getCost());
 
 
                 } else {
@@ -206,6 +199,11 @@ public class Problem {
 
                     }
 
+                }
+
+                if(currentSolution.getCost() < bestSolution.getCost()) {
+                    bestSolution = currentSolution;
+                    System.out.println("Better solution cost: " + bestSolution.getCost());
                 }
 
                 iterations++;

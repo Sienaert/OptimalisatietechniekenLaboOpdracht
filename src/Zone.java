@@ -47,13 +47,21 @@ public class Zone {
 	
 	//deep copy
 	public Zone(Zone z) {
-        this.zoneId = z.zoneId;
+		this.zoneId = z.zoneId;
 
         carList = new ArrayList<>(z.getCarList());
         //Refresh each car usage
 		for(Car car : carList) car.setTimeUsed(new IntervalTree());
 
         requestList = new ArrayList<>(z.getRequestList());
+
+        //reset requests
+		for(Request request : requestList){
+			request.setRedirected(false);
+			request.setAssigned(false);
+			request.setCarID(null);
+		}
+
         adjacentZones = new ArrayList<>(z.getAdjacentZones());
         latestCost=z.getLatestCost();
         this.changed=z.changed;
@@ -139,11 +147,9 @@ public class Zone {
 				request.setAssigned(false);
 			}
 
-
-
-
-			//If (not) handled, set redirected
 		}
+
+		calculateCost();
 	}
 
 	public boolean handleRedirectedRequest(Request redirectedRequest){
@@ -175,24 +181,17 @@ public class Zone {
 	
 	
 	public void calculateCost() {
-		//TODO implement
 		int result=0;
 
-		//use algorithm to place cars
-		
-		
-		
 		//calculate costs
 		for(Request request : requestList){
-		    if(request.isRedirected()){
-		        result += request.getPenalty2();
+			if(request.isRedirected()){
+				result += request.getPenalty2();
             }
             else if(!request.isAssigned()){
-		        result += request.getPenalty1();
+				result += request.getPenalty1();
             }
         }
-		
-		
 		//set latest cost
 		latestCost=result;
 		
@@ -235,5 +234,13 @@ public class Zone {
 
 	public void addAdjacentZone(Zone zone){
 		adjacentZones.add(zone);
+	}
+
+	public void addCar(Car car){
+		carList.add(car);
+	}
+
+	public void removeCar(Car car){
+		carList.remove(car);
 	}
 }
