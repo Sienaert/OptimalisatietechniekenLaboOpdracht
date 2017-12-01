@@ -114,6 +114,7 @@ public class Zone {
 					if(car.assignCar(request)){
 						//If assigned successful, break out of while-loop and handle next request
 						request.setAssigned(true);
+						request.setCarID(car.getCarId());
 						requestIsBeingProcessed = false;
 					}
 				}
@@ -162,6 +163,7 @@ public class Zone {
 				if(car.assignCar(redirectedRequest)){
 					//If assigned successful, break out of while-loop and handle next request
 					redirectedRequest.setAssigned(true);
+					redirectedRequest.setCarID(car.getCarId());
 					requestIsBeingProcessed = false;
 				}
 			}
