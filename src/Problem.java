@@ -11,6 +11,108 @@ public class Problem {
 
 	public static Random random;
 	private Printer printer;
+	private String solutionFileName;
+
+
+	//"propere" constructor 
+	public Problem(String inputFileName, String solutionFileName, int randomSeed, int timeLimitSeconds,int maxAmountOfThreads) throws IOException{
+        printer = new Printer();
+        this.solutionFileName=solutionFileName;
+        
+        requestList = new ArrayList<>();
+        zoneList = new ArrayList<>();
+        carList = new ArrayList<>();
+        
+
+        String line;
+        String cvsSplitBy = ";";
+
+        // Make map of requestID and possiblecars to fix after
+        List<String> carMap = new ArrayList<>();
+
+        // And for ZoneID..
+        int[] zoneIDs;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(inputFileName))) {
+
+            // Read Requests
+            int numberOfRequests = Integer.parseInt(br.readLine().split(" ")[1]);
+
+            zoneIDs = new int[numberOfRequests];
+
+            for (int requestId = 0; requestId < numberOfRequests; requestId++) {
+                line = br.readLine();
+                String[] request = line.split(cvsSplitBy);
+
+                // Fix zones
+                int zoneId = Integer.parseInt(request[1].substring(1));
+                zoneIDs[requestId] = zoneId;
+
+                // Fix links
+                String possibleCars = request[5];
+                carMap.add(possibleCars);
+
+                Request newRequest = new Request(request[0], Integer.parseInt(request[2]), Integer.parseInt(request[3]),
+                        Integer.parseInt(request[4]), Integer.parseInt(request[request.length - 2]),
+                        Integer.parseInt(request[request.length - 1]));
+                requestList.add(newRequest);
+            }
+
+            // Read Zones
+            int numberOfZones = Integer.parseInt(br.readLine().split(" ")[1]);
+
+            for (int zoneId = 0; zoneId < numberOfZones; zoneId++) {
+                line = br.readLine();
+                String[] zoneStr = line.split(cvsSplitBy);
+
+
+                zoneList.add(new Zone(zoneStr[0]));
+
+
+                String[] adjacentString = zoneStr[1].split(",");
+
+                for (String adjacentZone : adjacentString) {
+                    zoneList.get(zoneId).addAdjacentZone(new Zone(adjacentZone));
+                }
+            }
+
+
+            // Read Cars
+            int numberOfCars = Integer.parseInt(br.readLine().split(" ")[1]);
+
+            for (int i = 0; i < numberOfCars; i++) {
+                line = br.readLine();
+                carList.add(new Car(line));
+            }
+
+            // Read Days
+            days = Integer.parseInt(br.readLine().split(" ")[1]);
+
+            // Fix car links in requests
+            for (Request request : requestList) {
+                List<Car> localCarList = new ArrayList<>();
+                String possibleCars = carMap.get(Integer.parseInt(request.getRequestId().substring(3)));
+                String[] cars = possibleCars.split(",");
+                for (String carString : cars) {
+                    localCarList.add(carList.get(Integer.parseInt(carString.substring(carString.length() - 1))));
+                }
+                request.setPossibleVehicleTypes(localCarList);
+
+                // Fix zoneID in request
+                request.setZone(zoneList.get(zoneIDs[requestList.indexOf(request)]));
+            }
+
+        }
+
+        //Place all requests in corresponding zone
+        for(Zone zone : zoneList){
+            for (Request request : requestList){
+                if(request.getZone() == zone)
+                    zone.addRequest(request);
+            }
+        }
+
+    }
 
     public Problem(String csvFile) throws IOException {
         printer = new Printer();
@@ -159,7 +261,7 @@ public class Problem {
 
         // willekeurig gekozen
         //while (t > 1000) {
-        while (t > 4999) {
+        while (t > 4000) {
 
             while (iterations < maxIterations) {
 
