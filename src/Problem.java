@@ -147,7 +147,7 @@ public class Problem {
         int iterations = 0;
 
         // willekeurig gekozen
-        int maxIterations = 100;
+        int maxIterations = 10;
         //int maxIterations = 1000;
 
         int delta;

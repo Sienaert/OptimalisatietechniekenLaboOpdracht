@@ -49,20 +49,46 @@ public class Zone {
 	public Zone(Zone z) {
 		this.zoneId = z.zoneId;
 
+		//TODO deep copy of Cars
+		carList = new ArrayList<>();
+		for(Car car:z.getCarList()) {
+			
+			carList.add(new Car(car));
+			
+		}
+		/*
         carList = new ArrayList<>(z.getCarList());
         //Refresh each car usage
 		for(Car car : carList) car.setTimeUsed(new IntervalTree());
-
-        requestList = new ArrayList<>(z.getRequestList());
+*/
+       
+		
+		
+		//TODO deep copy of requests
+		requestList = new ArrayList<>();
+		for(Request request : z.getRequestList()){
+			
+			requestList.add(new Request(request));
+		}
+		
+		
+		/*
+		requestList = new ArrayList<>(z.getRequestList());
 
         //reset requests
+      
 		for(Request request : requestList){
 			request.setRedirected(false);
 			request.setAssigned(false);
 			request.setCarID(null);
 		}
+		*/
 
+		
+		
+		//TODO klopt de lijn hieronder?------------------------------------------------------------
         adjacentZones = new ArrayList<>(z.getAdjacentZones());
+        //
         latestCost=z.getLatestCost();
         this.changed=z.changed;
     }
