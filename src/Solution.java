@@ -50,14 +50,18 @@ public class Solution {
 	}
 
 	public int getCost() {
-		int tempCost = 0;
-
+		for(Zone zone : zones){
+			zone.handleRequests();
+			
+		}
+		
 		for(Zone zone : zones){
 			zone.calculateCost();
-			tempCost+=zone.getLatestCost();
+			
 		}
+		
+		calculateCost();
 
-		cost = tempCost;
 
 		return cost;
 	}
@@ -135,7 +139,7 @@ public class Solution {
 		return neighbour;
 	}
 
-	public void calculateCost() {
+	private void calculateCost() {
 		// TODO Auto-generated method stub
 		cost = 0;
 		
@@ -155,10 +159,5 @@ public class Solution {
 				'}';
 	}
 
-	public void assignRequests(){
-		for(Zone zone : zones){
-
-		}
-
-	}
+	
 }

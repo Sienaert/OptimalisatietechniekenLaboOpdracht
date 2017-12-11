@@ -137,7 +137,7 @@ public class Problem {
 
         // genereren eerste oplossing
         Solution currentSolution = new Solution();
-
+        currentSolution.getCost();
         System.out.println("Initial solution costs: " + currentSolution.getCost());
         Solution bestSolution = currentSolution;
 
@@ -147,9 +147,9 @@ public class Problem {
         int iterations = 0;
 
         // willekeurig gekozen
-        int maxIterations = 1000;
+        int maxIterations = 1;
 
-        int delta;
+        int delta=-1;
         double passChance;
         double randomNumber;
 
@@ -157,21 +157,22 @@ public class Problem {
         Long start = System.currentTimeMillis();
 
         // willekeurig gekozen
-        while (t > 1000) {
+        while (t > 4999) {
 
             while (iterations < maxIterations) {
 
                 // generate random neighbour
                 Solution randomSolution = currentSolution.getNeighbour();
-
-
-                randomSolution.calculateCost();
-                currentSolution.calculateCost();
-
+                
+                
 
                 delta = randomSolution.getCost() - currentSolution.getCost();
+                System.out.println("current:\n"+currentSolution);
+                System.out.println("random:\n"+randomSolution);
+                System.out.println("delta: "+delta);
                 if (delta <= 0) {
 
+                	System.out.println("-better or equal cost");
                     currentSolution = randomSolution;
                     // doorgeven aan grafiek
                     allSolutions.add(currentSolution.getCost());
@@ -181,16 +182,21 @@ public class Problem {
                     // code hier --> MOET blocking zijn anders problemen.
 
                     //Beste oplossing bijhouden
+                    if (delta<0) {
+                    	bestSolution = currentSolution;
+                    	System.out.println("---Better solution cost: " + bestSolution.getCost());
+                    }
 
 
                 } else {
                     // acepteren met probabiliteit
-
-                    passChance = Math.exp(((float) delta) / ((float) t));
+                	System.out.println("-worse cost");
+                    passChance = Math.exp(-((float) delta) / ((float) t));
+                    //System.out.println("-->"+passChance);
                     randomNumber = random.nextDouble();
-
-                    if (randomNumber >= passChance) {
-
+                    
+                    if (randomNumber <= passChance) {
+                    	System.out.println("passed");
                         currentSolution = randomSolution;
 
                         // doorgeven aan grafiek
@@ -201,10 +207,6 @@ public class Problem {
 
                 }
 
-                if(currentSolution.getCost() < bestSolution.getCost()) {
-                    bestSolution = currentSolution;
-                    System.out.println("Better solution cost: " + bestSolution.getCost());
-                }
 
                 iterations++;
             }
@@ -238,21 +240,24 @@ public class Problem {
         }
 
 
-        System.out.println(allSolutions);
+       
+
+        System.out.println("Best solution: " + bestSolution.toString());
+        printer.GenerateOutput(bestSolution);
+        
+        
+/*        
+ System.out.println(allSolutions);
         System.out.println(timeForSolution);
 
         try (PrintWriter out = new PrintWriter("graph.csv")) {
-            out.println(sb.toString());
+            out.print(sb.toString());
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
-        System.out.println("Best solution: " + bestSolution.toString());
-        printer.GenerateOutput(bestSolution);
-
-
-
+*/
     }
 
 	@Override
