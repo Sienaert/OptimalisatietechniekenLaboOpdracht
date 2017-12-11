@@ -153,10 +153,10 @@ public class Solution {
 
 	@Override
 	public String toString() {
-		return "Solution{" +
+		return "\nSolution{" +
 				"cost=" + cost +
 				", zones=" + zones +
-				'}';
+				"}\n\n";
 	}
 
 	
