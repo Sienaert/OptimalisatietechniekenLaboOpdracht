@@ -128,8 +128,9 @@ public class Zone {
 				i++;
 			}
 
+			//even in comment zetten
 			//If no car found, request is still being processed
-			if(requestIsBeingProcessed){
+			/*if(requestIsBeingProcessed){
 				//Push request to each neighbour => return boolean if handled
 				for(Zone adjacentZone : adjacentZones){
 					//If adjacent zone can handle the request, end loop
@@ -140,7 +141,7 @@ public class Zone {
 						break;
 					}
 				}
-			}
+			}*/
 
 			//Still no luck, request not assigned
 			if(requestIsBeingProcessed){
@@ -199,12 +200,13 @@ public class Zone {
 		changed=false;
 	}
 
-    @Override
-    public String toString() {
-        return "Zone{" +
-                "zoneId=" + zoneId +
-                '}';
-    }
+    /* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "\nZone [zoneId=" + zoneId + "\n, carList=" + carList + "\n, requestList=" + requestList  +/* ", changed=" + changed + */"\n, latestCost=" + latestCost + "]";
+	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()

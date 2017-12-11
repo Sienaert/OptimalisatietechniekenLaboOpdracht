@@ -49,15 +49,24 @@ public class Solution {
 		this.zones = zones;
 	}
 
-	public int getCost() {
-		int tempCost = 0;
-
+	
+	public void process() {
+		
+		for(Zone zone : zones){
+			zone.handleRequests();
+			
+		}
+		
 		for(Zone zone : zones){
 			zone.calculateCost();
-			tempCost+=zone.getLatestCost();
+			
 		}
+		
+		calculateCost();
+	}
+	public int getCost() {
+		
 
-		cost = tempCost;
 
 		return cost;
 	}
@@ -135,7 +144,7 @@ public class Solution {
 		return neighbour;
 	}
 
-	public void calculateCost() {
+	private void calculateCost() {
 		// TODO Auto-generated method stub
 		cost = 0;
 		
@@ -149,16 +158,11 @@ public class Solution {
 
 	@Override
 	public String toString() {
-		return "Solution{" +
+		return "\nSolution{" +
 				"cost=" + cost +
 				", zones=" + zones +
-				'}';
+				"}\n\n";
 	}
 
-	public void assignRequests(){
-		for(Zone zone : zones){
-
-		}
-
-	}
+	
 }

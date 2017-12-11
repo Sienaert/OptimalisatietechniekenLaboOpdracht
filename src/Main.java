@@ -21,6 +21,8 @@ public class Main {
     	int maxAmountOfThreads=Integer.parseInt(args[4]);
     	
     	try {
+    		
+    	//TODO niewe constructor schrijven
 		problem = new Problem(inputFileName,solutionFileName,randomSeed,timeLimitSeconds,maxAmountOfThreads);
 		
 
