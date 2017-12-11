@@ -137,19 +137,20 @@ public class Problem {
 
         // genereren eerste oplossing
         Solution currentSolution = new Solution();
+        currentSolution.process();
         currentSolution.getCost();
         System.out.println("Initial solution costs: " + currentSolution.getCost());
         Solution bestSolution = currentSolution;
-
         // T=T_max willekeurig gekozen
         int t = 5000;
 
         int iterations = 0;
 
         // willekeurig gekozen
-        int maxIterations = 1;
+        int maxIterations = 100;
+        //int maxIterations = 1000;
 
-        int delta=-1;
+        int delta;
         double passChance;
         double randomNumber;
 
@@ -157,6 +158,7 @@ public class Problem {
         Long start = System.currentTimeMillis();
 
         // willekeurig gekozen
+        //while (t > 1000) {
         while (t > 4999) {
 
             while (iterations < maxIterations) {
@@ -165,7 +167,7 @@ public class Problem {
                 Solution randomSolution = currentSolution.getNeighbour();
                 
                 
-
+                randomSolution.process();
                 delta = randomSolution.getCost() - currentSolution.getCost();
                 System.out.println("current:\n"+currentSolution);
                 System.out.println("random:\n"+randomSolution);

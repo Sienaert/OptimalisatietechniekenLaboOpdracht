@@ -49,7 +49,9 @@ public class Solution {
 		this.zones = zones;
 	}
 
-	public int getCost() {
+	
+	public void process() {
+		
 		for(Zone zone : zones){
 			zone.handleRequests();
 			
@@ -61,6 +63,9 @@ public class Solution {
 		}
 		
 		calculateCost();
+	}
+	public int getCost() {
+		
 
 
 		return cost;
