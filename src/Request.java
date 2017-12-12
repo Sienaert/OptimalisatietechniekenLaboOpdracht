@@ -124,8 +124,8 @@ public class Request{
 	@Override
 	public String toString() {
 		return "||Request [requestId=" + requestId + ", dayIndex=" + dayIndex + ", startTime="
-				+ startTime + ", duration=" + duration /*+ ", possibleVehicleTypes=" + possibleVehicleTypes
-				+ ", penalty1=" + penalty1 + ", penalty2=" + penalty2 + ", redirected=" + redirected*/ + ", assigned="
+				+ startTime + ", duration=" + duration + ", possibleVehicleTypes=" + possibleVehicleTypes
+				/*+ ", penalty1=" + penalty1 + ", penalty2=" + penalty2 + ", redirected=" + redirected*/ + ", assigned="
 				+ assigned + "]";
 	}
 

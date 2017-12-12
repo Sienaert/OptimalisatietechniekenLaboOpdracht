@@ -15,6 +15,7 @@ public class Problem {
 
 
 	//"propere" constructor 
+	//werkt waarschijnlijk niet meer correct-->moet nog aangepast worden
 	public Problem(String inputFileName, String solutionFileName, int randomSeed, int timeLimitSeconds,int maxAmountOfThreads) throws IOException{
         printer = new Printer();
         this.solutionFileName=solutionFileName;
@@ -113,6 +114,13 @@ public class Problem {
         }
 
     }
+	
+	
+	
+	
+	
+	
+	//testConstructor
 
     public Problem(String csvFile) throws IOException {
         printer = new Printer();
@@ -124,7 +132,7 @@ public class Problem {
         String cvsSplitBy = ";";
 
         // Make map of requestID and possiblecars to fix after
-        List<String> carMap = new ArrayList<>();
+        Map<String,String> carMap = new HashMap<>();
 
         // And for ZoneID..
         int[] zoneIDs;
@@ -145,8 +153,10 @@ public class Problem {
                 zoneIDs[requestId] = zoneId;
 
                 // Fix links
+   //==========================================================================================
+                //fout hieronder
                 String possibleCars = request[5];
-                carMap.add(possibleCars);
+                carMap.put(request[0],possibleCars);
 
                 Request newRequest = new Request(request[0], Integer.parseInt(request[2]), Integer.parseInt(request[3]),
                         Integer.parseInt(request[4]), Integer.parseInt(request[request.length - 2]),
@@ -175,28 +185,34 @@ public class Problem {
 
             // Read Cars
             int numberOfCars = Integer.parseInt(br.readLine().split(" ")[1]);
-
+            Map <String,Car>carListMap =new HashMap<>();
             for (int i = 0; i < numberOfCars; i++) {
                 line = br.readLine();
-                carList.add(new Car(line));
+                Car c=new Car(line);
+                carList.add(c);
+                carListMap.put(c.getCarId(), c);
             }
 
             // Read Days
             days = Integer.parseInt(br.readLine().split(" ")[1]);
 
             // Fix car links in requests
+            //fout zit hierin
             for (Request request : requestList) {
                 List<Car> localCarList = new ArrayList<>();
-                String possibleCars = carMap.get(Integer.parseInt(request.getRequestId().substring(3)));
+                String possibleCars = carMap.get(request.getRequestId());
                 String[] cars = possibleCars.split(",");
                 for (String carString : cars) {
-                    localCarList.add(carList.get(Integer.parseInt(carString.substring(carString.length() - 1))));
+                	//-->fout hieronder!
+                    localCarList.add(carListMap.get(carString));
                 }
                 request.setPossibleVehicleTypes(localCarList);
 
                 // Fix zoneID in request
                 request.setZone(zoneList.get(zoneIDs[requestList.indexOf(request)]));
             }
+            //===================================================
+            //fout hierboven
 
         }
 
@@ -210,6 +226,8 @@ public class Problem {
 
     }
 
+    
+    
     public List<Request> getRequestList() {
         return requestList;
     }
@@ -244,6 +262,7 @@ public class Problem {
         System.out.println("Initial solution costs: " + currentSolution.getCost());
         Solution bestSolution = currentSolution;
         // T=T_max willekeurig gekozen
+        //int t=5000;
         int t = 5000;
 
         int iterations = 0;
@@ -261,7 +280,7 @@ public class Problem {
 
         // willekeurig gekozen
         //while (t > 1000) {
-        while (t > 4000) {
+        while (t > 1000) {
 
             while (iterations < maxIterations) {
 
@@ -271,12 +290,12 @@ public class Problem {
                 
                 randomSolution.process();
                 delta = randomSolution.getCost() - currentSolution.getCost();
-                System.out.println("current:\n"+currentSolution);
-                System.out.println("random:\n"+randomSolution);
-                System.out.println("delta: "+delta);
+                //System.out.println("current:\n"+currentSolution);
+                //System.out.println("random:\n"+randomSolution);
+                //System.out.println("delta: "+delta);
                 if (delta <= 0) {
 
-                	System.out.println("-better or equal cost");
+                	//System.out.println("-better or equal cost");
                     currentSolution = randomSolution;
                     // doorgeven aan grafiek
                     allSolutions.add(currentSolution.getCost());
@@ -294,13 +313,13 @@ public class Problem {
 
                 } else {
                     // acepteren met probabiliteit
-                	System.out.println("-worse cost");
+                	//System.out.println("-worse cost");
                     passChance = Math.exp(-((float) delta) / ((float) t));
                     //System.out.println("-->"+passChance);
                     randomNumber = random.nextDouble();
                     
                     if (randomNumber <= passChance) {
-                    	System.out.println("passed");
+                    	//System.out.println("passed");
                         currentSolution = randomSolution;
 
                         // doorgeven aan grafiek
@@ -350,7 +369,7 @@ public class Problem {
         printer.GenerateOutput(bestSolution);
         
         
-/*        
+     
  System.out.println(allSolutions);
         System.out.println(timeForSolution);
 
@@ -361,7 +380,7 @@ public class Problem {
             e.printStackTrace();
         }
 
-*/
+
     }
 
 	@Override
