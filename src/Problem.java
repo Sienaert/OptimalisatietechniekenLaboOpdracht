@@ -153,8 +153,7 @@ public class Problem {
                 zoneIDs[requestId] = zoneId;
 
                 // Fix links
-   //==========================================================================================
-                //fout hieronder
+ 
                 String possibleCars = request[5];
                 carMap.put(request[0],possibleCars);
 
@@ -197,13 +196,13 @@ public class Problem {
             days = Integer.parseInt(br.readLine().split(" ")[1]);
 
             // Fix car links in requests
-            //fout zit hierin
+    
             for (Request request : requestList) {
                 List<Car> localCarList = new ArrayList<>();
                 String possibleCars = carMap.get(request.getRequestId());
                 String[] cars = possibleCars.split(",");
                 for (String carString : cars) {
-                	//-->fout hieronder!
+                	
                     localCarList.add(carListMap.get(carString));
                 }
                 request.setPossibleVehicleTypes(localCarList);
@@ -211,8 +210,6 @@ public class Problem {
                 // Fix zoneID in request
                 request.setZone(zoneList.get(zoneIDs[requestList.indexOf(request)]));
             }
-            //===================================================
-            //fout hierboven
 
         }
 
@@ -246,6 +243,7 @@ public class Problem {
     }
 
     public void solve() throws IOException{
+    	int amountOfCars=carList.size();
         List<Integer> allSolutions = new ArrayList<Integer>();
         List<Long> timeForSolution = new ArrayList<Long>();
         random = new Random(0);
@@ -280,19 +278,19 @@ public class Problem {
 
         // willekeurig gekozen
         //while (t > 1000) {
-        while (t > 1000) {
+        while (t > 4900) {
 
             while (iterations < maxIterations) {
 
                 // generate random neighbour
-                Solution randomSolution = currentSolution.getNeighbour();
+                Solution randomSolution = currentSolution.getNeighbour(amountOfCars);
                 
                 
                 randomSolution.process();
                 delta = randomSolution.getCost() - currentSolution.getCost();
-                //System.out.println("current:\n"+currentSolution);
-                //System.out.println("random:\n"+randomSolution);
-                //System.out.println("delta: "+delta);
+               // System.out.println("current:\n"+currentSolution);
+               // System.out.println("random:\n"+randomSolution);
+               // System.out.println("delta: "+delta);
                 if (delta <= 0) {
 
                 	//System.out.println("-better or equal cost");
