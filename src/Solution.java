@@ -18,7 +18,6 @@ public class Solution {
 		}
 
 
-		//TODO: make initial solution more random
 		//add all cars to 1 zone
 		zones.get(0).setCarList(Problem.carList);
 		

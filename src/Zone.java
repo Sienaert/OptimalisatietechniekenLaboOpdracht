@@ -59,6 +59,7 @@ public class Zone {
 	//deep copy
 	public Zone(Zone z) {
 		this.zoneId = z.zoneId;
+		this.redirectedRequests = z.getRedirectedRequests();
 
 		//TODO deep copy of Cars
 		carList = new ArrayList<>();
@@ -156,6 +157,7 @@ public class Zone {
 					if(car.assignCar(request)){
 						//If assigned successful, break out of while-loop and handle next request
 						request.setAssigned(true);
+						request.setRedirected(false);
 						request.setCarID(car.getCarId());
 						requestIsBeingProcessed = false;
 					}
@@ -171,11 +173,14 @@ public class Zone {
 				//Push request to each neighbour => return boolean if handled
 				for(Zone adjacentZone : adjacentZones){
 					//If adjacent zone can handle the request, end loop
-					if(adjacentZone.handleRedirectedRequest(request)){
-						adjacentZone.setChanged(true);
-						request.setRedirected(true);
-						requestIsBeingProcessed = false;
-						break;
+
+					if(requestIsBeingProcessed){
+						if(adjacentZone.handleRedirectedRequest(request)){
+							adjacentZone.setChanged(true);
+							request.setRedirected(true);
+							requestIsBeingProcessed = false;
+							break;
+						}
 					}
 				}
 			}
@@ -226,11 +231,10 @@ public class Zone {
 			if (!request.isAssigned() && !request.isRedirected()){
 				result += request.getPenalty1();
             }
+            else if(request.isRedirected()){
+				result += request.getPenalty2();
+			}
         }
-
-        for(Request redirectedRequest : redirectedRequests){
-			result += redirectedRequest.getPenalty2();
-		}
 
 		//set latest cost
 		latestCost=result;

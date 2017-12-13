@@ -23,7 +23,7 @@ public class Problem {
     	//tijd waarin simulated anealing afsluit --> voorlopig buffer van 1 seconde
     	stopTime=System.currentTimeMillis()+1000*(timeLimitSeconds-1);
     	
-    	random = new Random(randomSeed);
+    	random = new Random();
     	printer = new Printer(solutionFileName);
         requestList = new ArrayList<>();
         zoneList = new ArrayList<>();
@@ -203,11 +203,6 @@ public class Problem {
                     // TODO oplossing doorgeven aan uitprintding
                     // code hier --> MOET blocking zijn anders problemen.
 
-                    //Beste oplossing bijhouden
-                    if (bestSolution.getCost()>currentSolution.getCost()) {
-                    	bestSolution = currentSolution;
-                    	System.out.println("---Better solution cost: " + bestSolution.getCost());
-                    }
 
 
                 } else {
@@ -216,7 +211,7 @@ public class Problem {
                     passChance = Math.exp(((float) delta) / ((float) t));
                     //System.out.println("-->"+passChance);
                     randomNumber = random.nextDouble();
-                    
+
                     if (randomNumber <= passChance) {
                     	//System.out.println("passed");
                         currentSolution = randomSolution;
@@ -227,6 +222,12 @@ public class Problem {
 
                     }
 
+                }
+
+                //Beste oplossing bijhouden
+                if (bestSolution.getCost()>currentSolution.getCost()) {
+                    bestSolution = currentSolution;
+                    System.out.println("---Better solution cost: " + bestSolution.getCost());
                 }
 
 
@@ -240,8 +241,6 @@ public class Problem {
             // dalen/stijgen
 
         }
-
-        System.out.println("Best solution: " + bestSolution.toString());
 
 
         for (int i = 0; i < timeForSolution.size(); i++) {
