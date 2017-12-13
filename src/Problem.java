@@ -145,10 +145,9 @@ public class Problem {
 
     public void solve() throws IOException{
     	int amountOfCars=carList.size();
-        List<Integer> allSolutions = new ArrayList<Integer>();
-        List<Long> timeForSolution = new ArrayList<Long>();
+        //List<Integer> allSolutions = new ArrayList<Integer>();
+        //List<Long> timeForSolution = new ArrayList<Long>();
         
-        int counter = 0;
 
         // start optimising
 
@@ -160,14 +159,15 @@ public class Problem {
         currentSolution.getCost();
         System.out.println("Initial solution costs: " + currentSolution.getCost());
         Solution bestSolution = currentSolution;
+        
         // T=T_max willekeurig gekozen
         //int t=5000;
-        int t = 1500;
+        int t = 3000;
 
         int iterations = 0;
 
         // willekeurig gekozen
-        int maxIterations = 100;
+        int maxIterations = 1000;
         //int maxIterations = 1000;
 
         int delta;
@@ -179,7 +179,8 @@ public class Problem {
 
         // willekeurig gekozen
         //while (t > 1000) {
-        while (t > 1000 && stopTime>System.currentTimeMillis()) {
+        
+        while (t > 0 && stopTime>System.currentTimeMillis()) {
 
             while (iterations < maxIterations && stopTime>System.currentTimeMillis()) {
 
@@ -197,8 +198,8 @@ public class Problem {
                 	//System.out.println("-better or equal cost");
                     currentSolution = randomSolution;
                     // doorgeven aan grafiek
-                    allSolutions.add(currentSolution.getCost());
-                    timeForSolution.add(System.currentTimeMillis());
+                   // allSolutions.add(currentSolution.getCost());
+                    //timeForSolution.add(System.currentTimeMillis());
 
                     // TODO oplossing doorgeven aan uitprintding
                     // code hier --> MOET blocking zijn anders problemen.
@@ -206,24 +207,28 @@ public class Problem {
                     //Beste oplossing bijhouden
                     if (bestSolution.getCost()>currentSolution.getCost()) {
                     	bestSolution = currentSolution;
+
                     	System.out.println("---Better solution cost: " + bestSolution.getCost());
                     }
 
 
                 } else {
+                	
                     // acepteren met probabiliteit
                 	//System.out.println("-worse cost");
-                    passChance = Math.exp(((float) delta) / ((float) t));
+                	
+                    passChance = Math.exp(((float) delta) / ((float) t))/2;
                     //System.out.println("-->"+passChance);
+                   // if(delta ==0)passChance=0;
                     randomNumber = random.nextDouble();
                     
                     if (randomNumber <= passChance) {
-                    	//System.out.println("passed");
+                    	System.out.println("passed");
                         currentSolution = randomSolution;
 
                         // doorgeven aan grafiek
-                        allSolutions.add(currentSolution.getCost());
-                        timeForSolution.add(System.currentTimeMillis());
+                       // allSolutions.add(currentSolution.getCost());
+                        //timeForSolution.add(System.currentTimeMillis());
 
                     }
 
@@ -234,6 +239,7 @@ public class Problem {
             }
 
             // eventueel: t met functie laten dalen
+            
             t--;
             iterations = 0;
             // eventueel: maxiterations kunnen we in functie van de temperatuur laten
@@ -244,7 +250,7 @@ public class Problem {
         System.out.println("Best solution: " + bestSolution.toString());
 
 
-        for (int i = 0; i < timeForSolution.size(); i++) {
+       /* for (int i = 0; i < timeForSolution.size(); i++) {
 
 
             timeForSolution.set(i, timeForSolution.get(i) - start);
@@ -260,25 +266,25 @@ public class Problem {
 
 
         }
-
+*/
 
        
 
-        System.out.println("Best solution: " + bestSolution.toString());
-        printer.GenerateOutput(bestSolution);
+     //   System.out.println("Best solution: " + bestSolution.toString());
+       printer.GenerateOutput(bestSolution);
         
         
      
- System.out.println(allSolutions);
-        System.out.println(timeForSolution);
-
+ //System.out.println(allSolutions);
+        //System.out.println(timeForSolution);
+/*
         try (PrintWriter out = new PrintWriter("graph.csv")) {
             out.print(sb.toString());
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
+*/
 
     }
 
