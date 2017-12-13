@@ -235,7 +235,7 @@ public class Problem {
             }
 
             // eventueel: t met functie laten dalen
-            t--;
+            if(t>0)t--;
             iterations = 0;
             // eventueel: maxiterations kunnen we in functie van de temperatuur laten
             // dalen/stijgen
@@ -246,6 +246,7 @@ public class Problem {
         printer.GenerateOutput(bestSolution);
         
         System.out.println("Done.");
+        //System.out.println(System.currentTimeMillis());
 
        /* for (int i = 0; i < timeForSolution.size(); i++) {
 
