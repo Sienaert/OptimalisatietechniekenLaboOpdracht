@@ -11,7 +11,7 @@ public class Test {
 
 		try {
 			//problem = new Problem("toy1.csv");
-			problem = new Problem(problemList[3]);
+			problem = new Problem(problemList[6], "solution.csv", 0, 10, 0);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -12,10 +12,12 @@ public class Problem {
 	public static Random random;
 	private Printer printer;
 	private String solutionFileName;
+	private long stopTime;
 
 
 	//"propere" constructor 
 	//werkt waarschijnlijk niet meer correct-->moet nog aangepast worden
+	/*
 	public Problem(String inputFileName, String solutionFileName, int randomSeed, int timeLimitSeconds,int maxAmountOfThreads) throws IOException{
         printer = new Printer();
         this.solutionFileName=solutionFileName;
@@ -115,15 +117,20 @@ public class Problem {
 
     }
 	
-	
+	*/
 	
 	
 	
 	
 	//testConstructor
 
-    public Problem(String csvFile) throws IOException {
-        printer = new Printer();
+    public Problem(String csvFile,String solutionFileName, int randomSeed, int timeLimitSeconds,int maxAmountOfThreads) throws IOException {
+    	
+    	//tijd waarin simulated anealing afsluit --> voorlopig buffer van 1 seconde
+    	stopTime=System.currentTimeMillis()+1000*(timeLimitSeconds-1);
+    	
+    	random = new Random(randomSeed);
+    	printer = new Printer(solutionFileName);
         requestList = new ArrayList<>();
         zoneList = new ArrayList<>();
         carList = new ArrayList<>();
@@ -246,7 +253,7 @@ public class Problem {
     	int amountOfCars=carList.size();
         List<Integer> allSolutions = new ArrayList<Integer>();
         List<Long> timeForSolution = new ArrayList<Long>();
-        random = new Random(0);
+        
         int counter = 0;
 
         // start optimising
@@ -278,9 +285,9 @@ public class Problem {
 
         // willekeurig gekozen
         //while (t > 1000) {
-        while (t > 1000) {
+        while (t > 1000 && stopTime>System.currentTimeMillis()) {
 
-            while (iterations < maxIterations) {
+            while (iterations < maxIterations && stopTime>System.currentTimeMillis()) {
 
                 // generate random neighbour
                 Solution randomSolution = currentSolution.getNeighbour(amountOfCars);

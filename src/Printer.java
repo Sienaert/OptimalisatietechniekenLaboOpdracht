@@ -8,12 +8,13 @@ public class Printer {
 	//assignedRequests
 	//unassignedRequests
 
-	public Printer(){
-		
+	String name;
+	public Printer(String solutionFileName){
+		name=solutionFileName;
 	}
 	
 	public void GenerateOutput(Solution solution) throws IOException{
-		FileWriter fw = new FileWriter("solution.csv");
+		FileWriter fw = new FileWriter(name);
 		PrintWriter pw = new PrintWriter(fw);
 		pw.println(solution.getCost());
 		pw.println("+Vehicle assignments");
