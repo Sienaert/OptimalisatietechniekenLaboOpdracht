@@ -11,17 +11,13 @@ public class Solution {
 
 		this.zones = new ArrayList<>();
 		
+		
 		//add zones to zones
 		for(Zone zone:Problem.zoneList) {
 			this.zones.add(zone);
 		}
 
-		// make better initial solution
-/*		for(Car car : Problem.carList){
-			Zone zone = zones.get(Problem.random.nextInt(zones.size()));
-			zone.addCar(car);
-		}*/
-		
+
 		//add all cars to 1 zone
 		zones.get(0).setCarList(Problem.carList);
 		
@@ -98,8 +94,49 @@ public class Solution {
 
 		//Added car usage refreshment with each new solution
 		Solution neighbour=new Solution(this);
-
+		
+		
 		List<Zone> neigbourZones = neighbour.getZones();
+		
+		//fix references to adj zones
+		List<Zone>oldAdjacent;
+		List <Zone>properAdjacent=new ArrayList<>();
+		String id;
+		
+		//for all zones
+		for(Zone z:neigbourZones) {
+			
+			//get oldAdjacent and replace them with proper zone with ok id
+			oldAdjacent=z.getAdjacentZones();
+			
+			for(Zone zo:oldAdjacent) {
+				
+				id=zo.getZoneId();
+				for(Zone proper:neigbourZones) {
+					
+					//find proper zone with same id and add to properAdjacent
+					if(proper.getZoneId().equals(id)) {
+						
+						properAdjacent.add(proper);
+						
+						break;
+					}
+					
+					
+				}
+				
+				
+				
+			}
+			
+			z.setAdjacentZones(properAdjacent);
+			properAdjacent=new ArrayList<>();
+			
+		}
+		
+		
+
+		
 
 		//TODO implementeren voor meerdere auto's te verzetten
 		
