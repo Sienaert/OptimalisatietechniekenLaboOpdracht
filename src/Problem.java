@@ -157,7 +157,7 @@ public class Problem {
         Solution currentSolution = new Solution();
         currentSolution.process();
         currentSolution.getCost();
-        System.out.println("Initial solution costs: " + currentSolution.getCost());
+      // System.out.println("Initial solution costs: " + currentSolution.getCost());
         Solution bestSolution = currentSolution;
 
         // T=T_max willekeurig gekozen
@@ -200,11 +200,14 @@ public class Problem {
                    // allSolutions.add(currentSolution.getCost());
                     //timeForSolution.add(System.currentTimeMillis());
 
-                    // TODO oplossing doorgeven aan uitprintding
-                    // code hier --> MOET blocking zijn anders problemen.
+                  
 
 
-
+                    //Beste oplossing bijhouden
+                if (bestSolution.getCost()>currentSolution.getCost()) {
+                    bestSolution = currentSolution;
+                    //System.out.println("---Better solution cost: " + bestSolution.getCost());
+                }
 
                 } else {
                     // acepteren met probabiliteit
@@ -225,11 +228,7 @@ public class Problem {
 
                 }
 
-                //Beste oplossing bijhouden
-                if (bestSolution.getCost()>currentSolution.getCost()) {
-                    bestSolution = currentSolution;
-                    System.out.println("---Better solution cost: " + bestSolution.getCost());
-                }
+                
 
 
                 iterations++;
@@ -243,8 +242,10 @@ public class Problem {
 
         }
 
-        System.out.println("Best solution: " + bestSolution.toString());
+        //System.out.println("Best solution: " + bestSolution.toString());
         printer.GenerateOutput(bestSolution);
+        
+        System.out.println("Done.");
 
        /* for (int i = 0; i < timeForSolution.size(); i++) {
 
