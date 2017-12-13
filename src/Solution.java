@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 public class Solution {
@@ -10,8 +11,8 @@ public class Solution {
 		//make initial solution
 
 		this.zones = new ArrayList<>();
-		
-		
+
+
 		//add zones to zones
 		for(Zone zone:Problem.zoneList) {
 			this.zones.add(zone);
@@ -23,11 +24,11 @@ public class Solution {
 //		}
 		//add all cars to 1 zone
 		zones.get(0).setCarList(Problem.carList);
-		
+
 		cost = Integer.MAX_VALUE;
 
 		//Handle all requests
-		for(Zone zone:zones) {	
+		for(Zone zone:zones) {
 			zone.handleRequests();
 		}
 		for(Zone zone : zones){
@@ -52,46 +53,41 @@ public class Solution {
 		this.zones = zones;
 	}
 
-	
+
 	public void process() {
 		for(Zone zone : zones){
 			zone.handleRequests();
-			
+
 		}
 
 		for(Zone zone : zones){
 			zone.handleRequestPart2();
 		}
-		
+
 		for(Zone zone : zones){
 			zone.calculateCost();
-			
+
 		}
-		
+
 		calculateCost();
 	}
 	public int getCost() {
-		
+
 
 
 		return cost;
 	}
 
-	
+
 	//deep copy
 	public Solution(Solution s) {
-		this.cost=Integer.MAX_VALUE;
+		this.cost=s.getCost();
 
-		zones=new ArrayList<>();
-		
-		//add zones to zones
-		for(Zone zone:s.getZones()) {	
-			zones.add(new Zone(zone));
-		}
+		this.zones = s.getZones();
 
 	}
-	
-	
+
+
 
 	//generating random neighbour
 	public Solution getNeighbour(int amountOfCars) {
@@ -102,73 +98,73 @@ public class Solution {
 		//method is not allowed to alter parameters from the this object!--> only parameters from neighbour should be altered.
 
 		//Added car usage refreshment with each new solution
-		Solution neighbour=new Solution(this);
+		Solution neighbour = this;
 
 		neighbour.clear();
-		
-		
+
+
 		List<Zone> neigbourZones = neighbour.getZones();
-		
+
 		//fix references to adj zones
 		List<Zone>oldAdjacent;
 		List <Zone>properAdjacent=new ArrayList<>();
 		String id;
-		
+
 		//for all zones
 		for(Zone z:neigbourZones) {
-			
+
 			//get oldAdjacent and replace them with proper zone with ok id
 			oldAdjacent=z.getAdjacentZones();
-			
+
 			for(Zone zo:oldAdjacent) {
-				
+
 				id=zo.getZoneId();
 				for(Zone proper:neigbourZones) {
-					
+
 					//find proper zone with same id and add to properAdjacent
 					if(proper.getZoneId().equals(id)) {
-						
+
 						properAdjacent.add(proper);
-						
+
 						break;
 					}
-					
-					
+
+
 				}
-				
-				
-				
+
+
+
 			}
-			
+
 			z.setAdjacentZones(properAdjacent);
 			properAdjacent=new ArrayList<>();
-			
-		}
-		
-		
 
-		
+		}
+
+
+
+
 
 		//TODO implementeren voor meerdere auto's te verzetten
-		
+
 		//pick 2 zones
 		//move 1 car from zone A to B
 
 		List<Zone> zonesWithCars = new ArrayList<>();
 
-		
+
 
 //		System.out.println("Moving " + randomCar.getCarId() + " from " + randomZoneWithCar + " to " + randomToZone);
 
-		
-		
+
+
 			for (Zone zone : neigbourZones) {
 				if (zone.getCarList().size() > 0)
 					zonesWithCars.add(zone);
 			}
-			
+
 			int iterations=amountOfCars/2;
-			
+
 			for(int i=0;i<iterations&&zonesWithCars.size()>0;i++){
 			//Random zone which will lose a car
 			Zone randomZoneWithCar = zonesWithCars.get(Problem.random.nextInt(zonesWithCars.size()));
@@ -187,10 +183,10 @@ public class Solution {
 				zonesWithCars.remove(randomZoneWithCar);
 			}
 			/*if(!zonesWithCars.contains(randomToZone)) {
-				
+
 				zonesWithCars.add(randomToZone);
 			}*/
-			
+
 			}
 
 
@@ -201,15 +197,16 @@ public class Solution {
 		return neighbour;
 	}
 
+
 	private void calculateCost() {
 		cost = 0;
-		
+
 		for(Zone z:zones) {
-			
+
 			cost += z.getLatestCost();
-			
+
 		}
-		
+
 	}
 
 	@Override
@@ -221,6 +218,8 @@ public class Solution {
 	}
 
 	public void clear(){
+		this.cost = Integer.MAX_VALUE;
+
 		for(Zone zone : zones){
 			//Remove redirected requests
 			zone.setRedirectedRequests(new ArrayList<>());

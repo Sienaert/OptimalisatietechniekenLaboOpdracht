@@ -206,7 +206,6 @@ public class Problem {
                     //Beste oplossing bijhouden
                 if (bestSolution.getCost()>currentSolution.getCost()) {
                     bestSolution = currentSolution;
-                    //System.out.println("---Better solution cost: " + bestSolution.getCost());
                 }
 
                 } else {
