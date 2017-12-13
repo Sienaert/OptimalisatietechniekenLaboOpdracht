@@ -186,9 +186,8 @@ public class Problem {
 
                 // generate random neighbour
                 Solution randomSolution = currentSolution.getNeighbour(amountOfCars);
-                
-                
                 randomSolution.process();
+
                 delta = randomSolution.getCost() - currentSolution.getCost();
                // System.out.println("current:\n"+currentSolution);
                // System.out.println("random:\n"+randomSolution);
