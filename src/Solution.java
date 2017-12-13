@@ -30,6 +30,10 @@ public class Solution {
 		for(Zone zone:zones) {	
 			zone.handleRequests();
 		}
+		for(Zone zone : zones){
+			zone.handleRequestPart2();
+		}
+
 		calculateCost();
 
 	}
@@ -53,6 +57,10 @@ public class Solution {
 		for(Zone zone : zones){
 			zone.handleRequests();
 			
+		}
+
+		for(Zone zone : zones){
+			zone.handleRequestPart2();
 		}
 		
 		for(Zone zone : zones){
@@ -184,16 +192,10 @@ public class Solution {
 			}*/
 			
 			}
-			
-		for(Zone zone : neigbourZones){
-			zone.handleRequests();
-		}
+
 
 		//Set zonelist from neighbour
 		neighbour.setZones(neigbourZones);
-
-
-		neighbour.calculateCost();
 
 
 		return neighbour;

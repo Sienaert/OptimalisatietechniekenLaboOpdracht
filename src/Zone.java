@@ -168,21 +168,21 @@ public class Zone {
 
 			//even in comment zetten
 			//If no car found, request is still being processed
-			if(requestIsBeingProcessed){
-				//Push request to each neighbour => return boolean if handled
-				for(Zone adjacentZone : adjacentZones){
-					//If adjacent zone can handle the request, end loop
-
-					if(requestIsBeingProcessed){
-						if(adjacentZone.handleRedirectedRequest(request)){
-							adjacentZone.setChanged(true);
-							request.setRedirected(true);
-							requestIsBeingProcessed = false;
-							break;
-						}
-					}
-				}
-			}
+//			if(requestIsBeingProcessed){
+//				//Push request to each neighbour => return boolean if handled
+//				for(Zone adjacentZone : adjacentZones){
+//					//If adjacent zone can handle the request, end loop
+//
+//					if(requestIsBeingProcessed){
+//						if(adjacentZone.handleRedirectedRequest(request)){
+//							adjacentZone.setChanged(true);
+//							request.setRedirected(true);
+//							requestIsBeingProcessed = false;
+//							break;
+//						}
+//					}
+//				}
+//			}
 
 			//Still no luck, request not assigned
 			if(requestIsBeingProcessed){
@@ -192,6 +192,22 @@ public class Zone {
 		}
 
 		calculateCost();
+	}
+
+
+	public void handleRequestPart2(){
+		for(Request request : requestList){
+			int i = 0;
+			boolean isNotAssigned = !request.isAssigned();
+			while(i<adjacentZones.size() && isNotAssigned){
+				Zone adjacentZone = adjacentZones.get(i);
+
+				if(adjacentZone.handleRedirectedRequest(request)){
+					isNotAssigned = false;
+				}
+				i++;
+			}
+		}
 	}
 
 	public boolean handleRedirectedRequest(Request redirectedRequest){
