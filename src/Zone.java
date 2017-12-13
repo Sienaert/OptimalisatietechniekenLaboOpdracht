@@ -14,8 +14,7 @@ public class Zone {
 
     //TODO: make intervalTree from requests -> to determine overlapping timeframes
 
-    public int getLatestCost() {
-//    	calculateCost();
+	public int getLatestCost() {
 		return latestCost;
 	}
 
@@ -192,6 +191,7 @@ public class Zone {
 
 		}
 
+		calculateCost();
 	}
 
 	public boolean handleRedirectedRequest(Request redirectedRequest){

@@ -47,7 +47,10 @@ public class Solution {
 
 	
 	public void process() {
-		
+		for(Zone zone : zones){
+			zone.preprocess();
+			
+		}
 		for(Zone zone : zones){
 			zone.handleRequests();
 			
