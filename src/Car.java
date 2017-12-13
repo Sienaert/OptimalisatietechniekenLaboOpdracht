@@ -11,6 +11,13 @@ public class Car {
         timeUsed = new IntervalTree();
     }
 
+	public Car(Car car) {
+		// TODO proper copy
+		this.carId=car.getCarId();
+		timeUsed = new IntervalTree();
+		
+	}
+
 	public String getCarId() {
 		return carId;
 	}

@@ -11,9 +11,20 @@ public class Problem {
 
 	public static Random random;
 	private Printer printer;
+	private String solutionFileName;
+	private long stopTime;
 
-    public Problem(String csvFile) throws IOException {
-        printer = new Printer();
+
+	
+	//testConstructor
+
+    public Problem(String csvFile,String solutionFileName, int randomSeed, int timeLimitSeconds,int maxAmountOfThreads) throws IOException {
+    	
+    	//tijd waarin simulated anealing afsluit --> voorlopig buffer van 1 seconde
+    	stopTime=System.currentTimeMillis()+1000*(timeLimitSeconds-1);
+    	
+    	random = new Random(randomSeed);
+    	printer = new Printer(solutionFileName);
         requestList = new ArrayList<>();
         zoneList = new ArrayList<>();
         carList = new ArrayList<>();
@@ -22,7 +33,7 @@ public class Problem {
         String cvsSplitBy = ";";
 
         // Make map of requestID and possiblecars to fix after
-        List<String> carMap = new ArrayList<>();
+        Map<String,String> carMap = new HashMap<>();
 
         // And for ZoneID..
         int[] zoneIDs;
@@ -43,8 +54,9 @@ public class Problem {
                 zoneIDs[requestId] = zoneId;
 
                 // Fix links
+ 
                 String possibleCars = request[5];
-                carMap.add(possibleCars);
+                carMap.put(request[0],possibleCars);
 
                 Request newRequest = new Request(request[0], Integer.parseInt(request[2]), Integer.parseInt(request[3]),
                         Integer.parseInt(request[4]), Integer.parseInt(request[request.length - 2]),
@@ -73,22 +85,26 @@ public class Problem {
 
             // Read Cars
             int numberOfCars = Integer.parseInt(br.readLine().split(" ")[1]);
-
+            Map <String,Car>carListMap =new HashMap<>();
             for (int i = 0; i < numberOfCars; i++) {
                 line = br.readLine();
-                carList.add(new Car(line));
+                Car c=new Car(line);
+                carList.add(c);
+                carListMap.put(c.getCarId(), c);
             }
 
             // Read Days
             days = Integer.parseInt(br.readLine().split(" ")[1]);
 
             // Fix car links in requests
+    
             for (Request request : requestList) {
                 List<Car> localCarList = new ArrayList<>();
-                String possibleCars = carMap.get(Integer.parseInt(request.getRequestId().substring(3)));
+                String possibleCars = carMap.get(request.getRequestId());
                 String[] cars = possibleCars.split(",");
                 for (String carString : cars) {
-                    localCarList.add(carList.get(Integer.parseInt(carString.substring(carString.length() - 1))));
+                	
+                    localCarList.add(carListMap.get(carString));
                 }
                 request.setPossibleVehicleTypes(localCarList);
 
@@ -108,6 +124,8 @@ public class Problem {
 
     }
 
+    
+    
     public List<Request> getRequestList() {
         return requestList;
     }
@@ -126,9 +144,10 @@ public class Problem {
     }
 
     public void solve() throws IOException{
+    	int amountOfCars=carList.size();
         List<Integer> allSolutions = new ArrayList<Integer>();
         List<Long> timeForSolution = new ArrayList<Long>();
-        random = new Random(0);
+        
         int counter = 0;
 
         // start optimising
@@ -137,17 +156,19 @@ public class Problem {
 
         // genereren eerste oplossing
         Solution currentSolution = new Solution();
-
+        currentSolution.process();
+        currentSolution.getCost();
         System.out.println("Initial solution costs: " + currentSolution.getCost());
         Solution bestSolution = currentSolution;
-
         // T=T_max willekeurig gekozen
-        int t = 5000;
+        //int t=5000;
+        int t = 1500;
 
         int iterations = 0;
 
         // willekeurig gekozen
-        int maxIterations = 1000;
+        int maxIterations = 100;
+        //int maxIterations = 1000;
 
         int delta;
         double passChance;
@@ -157,21 +178,23 @@ public class Problem {
         Long start = System.currentTimeMillis();
 
         // willekeurig gekozen
-        while (t > 1000) {
+        //while (t > 1000) {
+        while (t > 1000 && stopTime>System.currentTimeMillis()) {
 
-            while (iterations < maxIterations) {
+            while (iterations < maxIterations && stopTime>System.currentTimeMillis()) {
 
                 // generate random neighbour
-                Solution randomSolution = currentSolution.getNeighbour();
-
-
-                randomSolution.calculateCost();
-                currentSolution.calculateCost();
-
-
+                Solution randomSolution = currentSolution.getNeighbour(amountOfCars);
+                
+                
+                randomSolution.process();
                 delta = randomSolution.getCost() - currentSolution.getCost();
-                if (delta <= 0) {
-
+               // System.out.println("current:\n"+currentSolution);
+               // System.out.println("random:\n"+randomSolution);
+               // System.out.println("delta: "+delta);
+               // if (delta <= 0) {
+                if (delta < 0) {
+                	//System.out.println("-better or equal cost");
                     currentSolution = randomSolution;
                     // doorgeven aan grafiek
                     allSolutions.add(currentSolution.getCost());
@@ -181,16 +204,21 @@ public class Problem {
                     // code hier --> MOET blocking zijn anders problemen.
 
                     //Beste oplossing bijhouden
+                    if (bestSolution.getCost()>currentSolution.getCost()) {
+                    	bestSolution = currentSolution;
+                    	System.out.println("---Better solution cost: " + bestSolution.getCost());
+                    }
 
 
                 } else {
                     // acepteren met probabiliteit
-
+                	//System.out.println("-worse cost");
                     passChance = Math.exp(((float) delta) / ((float) t));
+                    //System.out.println("-->"+passChance);
                     randomNumber = random.nextDouble();
-
-                    if (randomNumber >= passChance) {
-
+                    
+                    if (randomNumber <= passChance) {
+                    	//System.out.println("passed");
                         currentSolution = randomSolution;
 
                         // doorgeven aan grafiek
@@ -201,10 +229,6 @@ public class Problem {
 
                 }
 
-                if(currentSolution.getCost() < bestSolution.getCost()) {
-                    bestSolution = currentSolution;
-                    System.out.println("Better solution cost: " + bestSolution.getCost());
-                }
 
                 iterations++;
             }
@@ -238,19 +262,22 @@ public class Problem {
         }
 
 
-        System.out.println(allSolutions);
+       
+
+        System.out.println("Best solution: " + bestSolution.toString());
+        printer.GenerateOutput(bestSolution);
+        
+        
+     
+ System.out.println(allSolutions);
         System.out.println(timeForSolution);
 
         try (PrintWriter out = new PrintWriter("graph.csv")) {
-            out.println(sb.toString());
+            out.print(sb.toString());
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
-        System.out.println("Best solution: " + bestSolution.toString());
-        printer.GenerateOutput(bestSolution);
-
 
 
     }

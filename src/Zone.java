@@ -49,20 +49,46 @@ public class Zone {
 	public Zone(Zone z) {
 		this.zoneId = z.zoneId;
 
+		//TODO deep copy of Cars
+		carList = new ArrayList<>();
+		for(Car car:z.getCarList()) {
+			
+			carList.add(new Car(car));
+			
+		}
+		/*
         carList = new ArrayList<>(z.getCarList());
         //Refresh each car usage
 		for(Car car : carList) car.setTimeUsed(new IntervalTree());
-
-        requestList = new ArrayList<>(z.getRequestList());
+*/
+       
+		
+		
+		//TODO deep copy of requests
+		requestList = new ArrayList<>();
+		for(Request request : z.getRequestList()){
+			
+			requestList.add(new Request(request));
+		}
+		
+		
+		/*
+		requestList = new ArrayList<>(z.getRequestList());
 
         //reset requests
+      
 		for(Request request : requestList){
 			request.setRedirected(false);
 			request.setAssigned(false);
 			request.setCarID(null);
 		}
+		*/
 
+		
+		
+		//TODO klopt de lijn hieronder?------------------------------------------------------------
         adjacentZones = new ArrayList<>(z.getAdjacentZones());
+        //
         latestCost=z.getLatestCost();
         this.changed=z.changed;
     }
@@ -128,8 +154,9 @@ public class Zone {
 				i++;
 			}
 
+			//even in comment zetten
 			//If no car found, request is still being processed
-			if(requestIsBeingProcessed){
+			/*if(requestIsBeingProcessed){
 				//Push request to each neighbour => return boolean if handled
 				for(Zone adjacentZone : adjacentZones){
 					//If adjacent zone can handle the request, end loop
@@ -140,7 +167,7 @@ public class Zone {
 						break;
 					}
 				}
-			}
+			}*/
 
 			//Still no luck, request not assigned
 			if(requestIsBeingProcessed){
@@ -199,12 +226,13 @@ public class Zone {
 		changed=false;
 	}
 
-    @Override
-    public String toString() {
-        return "Zone{" +
-                "zoneId=" + zoneId +
-                '}';
-    }
+    /* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "\nZone [zoneId=" + zoneId + "\n, carList=" + carList + "\n, requestList=" + requestList  +/* ", changed=" + changed + */"\n, latestCost=" + latestCost + "]";
+	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
