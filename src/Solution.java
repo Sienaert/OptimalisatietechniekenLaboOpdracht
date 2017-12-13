@@ -18,6 +18,9 @@ public class Solution {
 		}
 
 
+//		for(Car car : Problem.carList){
+//			zones.get(Problem.random.nextInt(zones.size())).addCar(car);
+//		}
 		//add all cars to 1 zone
 		zones.get(0).setCarList(Problem.carList);
 		
@@ -47,10 +50,6 @@ public class Solution {
 
 	
 	public void process() {
-		for(Zone zone : zones){
-			zone.preprocess();
-			
-		}
 		for(Zone zone : zones){
 			zone.handleRequests();
 			

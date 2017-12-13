@@ -245,7 +245,7 @@ public class Problem {
         }
 
         System.out.println("Best solution: " + bestSolution.toString());
-
+        printer.GenerateOutput(bestSolution);
 
        /* for (int i = 0; i < timeForSolution.size(); i++) {
 
@@ -265,10 +265,11 @@ public class Problem {
         }
 
 
+
        
 
      //   System.out.println("Best solution: " + bestSolution.toString());
-       printer.GenerateOutput(bestSolution);
+
         
         
      
@@ -281,6 +282,7 @@ public class Problem {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        */
 
 
     }
