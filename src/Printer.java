@@ -14,6 +14,8 @@ public class Printer {
 	}
 	
 	public void GenerateOutput(Solution solution) throws IOException{
+		solution.process();
+
 		FileWriter fw = new FileWriter(name);
 		PrintWriter pw = new PrintWriter(fw);
 		pw.println(solution.getCost());
@@ -26,15 +28,18 @@ public class Printer {
 		pw.println("+Assigned requests");
 		for(Zone zone: solution.getZones()){
 			for(Request request : zone.getRequestList()){
-				if(request.isAssigned()){
+				if(request.isAssigned() && !request.isRedirected()){
 					pw.println(request.getRequestId()+";"+request.getCarID());
 				}
+			}
+			for(Request request : zone.getRedirectedRequests()){
+				pw.println(request.getRequestId()+";"+request.getCarID());
 			}
 		}
 		pw.println("+Unassigned requests");
 		for(Zone zone: solution.getZones()){
 			for(Request request : zone.getRequestList()){
-				if(!request.isAssigned()){
+				if(!request.isAssigned() && !request.isRedirected()){
 					pw.println(request.getRequestId());
 				}
 			}

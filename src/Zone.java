@@ -7,6 +7,7 @@ public class Zone {
     private String zoneId;
     private List<Car> carList;
     private List<Request> requestList;
+    private List<Request> redirectedRequests;
     private List<Zone> adjacentZones;
     boolean changed;
     int latestCost=Integer.MAX_VALUE;
@@ -14,11 +15,20 @@ public class Zone {
     //TODO: make intervalTree from requests -> to determine overlapping timeframes
 
     public int getLatestCost() {
+//    	calculateCost();
 		return latestCost;
 	}
 
 	public void setCarList(List<Car> carList) {
 		this.carList = carList;
+	}
+
+	public List<Request> getRedirectedRequests() {
+		return redirectedRequests;
+	}
+
+	public void setRedirectedRequests(List<Request> redirectedRequests) {
+		this.redirectedRequests = redirectedRequests;
 	}
 
 	/**
@@ -42,6 +52,7 @@ public class Zone {
         requestList = new ArrayList<>();
         adjacentZones = new ArrayList<>();
         changed=false;
+        redirectedRequests = new ArrayList<>();
 
     }
 	
@@ -156,7 +167,7 @@ public class Zone {
 
 			//even in comment zetten
 			//If no car found, request is still being processed
-			/*if(requestIsBeingProcessed){
+			if(requestIsBeingProcessed){
 				//Push request to each neighbour => return boolean if handled
 				for(Zone adjacentZone : adjacentZones){
 					//If adjacent zone can handle the request, end loop
@@ -167,7 +178,7 @@ public class Zone {
 						break;
 					}
 				}
-			}*/
+			}
 
 			//Still no luck, request not assigned
 			if(requestIsBeingProcessed){
@@ -176,7 +187,6 @@ public class Zone {
 
 		}
 
-		calculateCost();
 	}
 
 	public boolean handleRedirectedRequest(Request redirectedRequest){
@@ -193,9 +203,10 @@ public class Zone {
 				//Try to assign car to request
 				if(car.assignCar(redirectedRequest)){
 					//If assigned successful, break out of while-loop and handle next request
-					redirectedRequest.setAssigned(true);
+					redirectedRequest.setRedirected(true);
 					redirectedRequest.setCarID(car.getCarId());
 					requestIsBeingProcessed = false;
+					redirectedRequests.add(redirectedRequest);
 				}
 			}
 
@@ -212,13 +223,15 @@ public class Zone {
 
 		//calculate costs
 		for(Request request : requestList){
-			if(request.isRedirected()){
-				result += request.getPenalty2();
-            }
-            else if(!request.isAssigned()){
+			if (!request.isAssigned() && !request.isRedirected()){
 				result += request.getPenalty1();
             }
         }
+
+        for(Request redirectedRequest : redirectedRequests){
+			result += redirectedRequest.getPenalty2();
+		}
+
 		//set latest cost
 		latestCost=result;
 		

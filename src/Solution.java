@@ -18,6 +18,7 @@ public class Solution {
 		}
 
 
+		//TODO: make initial solution more random
 		//add all cars to 1 zone
 		zones.get(0).setCarList(Problem.carList);
 		
@@ -91,9 +92,10 @@ public class Solution {
 		//neighbour has one car moved from one zone to another
 		//method is not allowed to alter parameters from the this object!--> only parameters from neighbour should be altered.
 
-
 		//Added car usage refreshment with each new solution
 		Solution neighbour=new Solution(this);
+
+		neighbour.clear();
 		
 		
 		List<Zone> neigbourZones = neighbour.getZones();
@@ -213,6 +215,26 @@ public class Solution {
 				"cost=" + cost +
 				", zones=" + zones +
 				"}\n\n";
+	}
+
+	public void clear(){
+		for(Zone zone : zones){
+			//Remove redirected requests
+			zone.setRedirectedRequests(new ArrayList<>());
+
+			//Fix requests
+			for(Request request : zone.getRequestList()){
+				request.setAssigned(false);
+				request.setCarID(null);
+				request.setRedirected(false);
+			}
+
+			for(Car car : zone.getCarList()){
+				car.setTimeUsed(new IntervalTree());
+			}
+
+
+		}
 	}
 
 	
