@@ -261,12 +261,12 @@ public class Problem {
         Solution bestSolution = currentSolution;
         // T=T_max willekeurig gekozen
         //int t=5000;
-        int t = 5000;
+        int t = 1500;
 
         int iterations = 0;
 
         // willekeurig gekozen
-        int maxIterations = 10;
+        int maxIterations = 100;
         //int maxIterations = 1000;
 
         int delta;
@@ -278,7 +278,7 @@ public class Problem {
 
         // willekeurig gekozen
         //while (t > 1000) {
-        while (t > 4900) {
+        while (t > 1000) {
 
             while (iterations < maxIterations) {
 
@@ -291,8 +291,8 @@ public class Problem {
                // System.out.println("current:\n"+currentSolution);
                // System.out.println("random:\n"+randomSolution);
                // System.out.println("delta: "+delta);
-                if (delta <= 0) {
-
+               // if (delta <= 0) {
+                if (delta < 0) {
                 	//System.out.println("-better or equal cost");
                     currentSolution = randomSolution;
                     // doorgeven aan grafiek
@@ -303,7 +303,7 @@ public class Problem {
                     // code hier --> MOET blocking zijn anders problemen.
 
                     //Beste oplossing bijhouden
-                    if (delta<0) {
+                    if (bestSolution.getCost()>currentSolution.getCost()) {
                     	bestSolution = currentSolution;
                     	System.out.println("---Better solution cost: " + bestSolution.getCost());
                     }
@@ -312,7 +312,7 @@ public class Problem {
                 } else {
                     // acepteren met probabiliteit
                 	//System.out.println("-worse cost");
-                    passChance = Math.exp(-((float) delta) / ((float) t));
+                    passChance = Math.exp(((float) delta) / ((float) t));
                     //System.out.println("-->"+passChance);
                     randomNumber = random.nextDouble();
                     

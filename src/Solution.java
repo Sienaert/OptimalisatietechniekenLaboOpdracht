@@ -16,7 +16,7 @@ public class Solution {
 			this.zones.add(zone);
 		}
 
-		//TODO: make better initial solution
+		// make better initial solution
 /*		for(Car car : Problem.carList){
 			Zone zone = zones.get(Problem.random.nextInt(zones.size()));
 			zone.addCar(car);
@@ -88,7 +88,7 @@ public class Solution {
 	
 
 	//generating random neighbour
-	public Solution getNeighbour() {
+	public Solution getNeighbour(int amountOfCars) {
 
 //		System.out.println("Requesting new neighbour");
 		//use Problem.random!
@@ -101,35 +101,50 @@ public class Solution {
 
 		List<Zone> neigbourZones = neighbour.getZones();
 
+		//TODO implementeren voor meerdere auto's te verzetten
+		
 		//pick 2 zones
 		//move 1 car from zone A to B
 
 		List<Zone> zonesWithCars = new ArrayList<>();
 
-		for(Zone zone : neigbourZones){
-			if(zone.getCarList().size() > 0)
-				zonesWithCars.add(zone);
-		}
-
-		//Random zone which will lose a car
-		Zone randomZoneWithCar = zonesWithCars.get(Problem.random.nextInt(zonesWithCars.size()));
-		neigbourZones.remove(randomZoneWithCar);
-
-		Zone randomToZone = neigbourZones.remove(Problem.random.nextInt(neigbourZones.size()));
-
-		//Random car from zone with cars
-		Car randomCar = randomZoneWithCar.getCarList().get(Problem.random.nextInt(randomZoneWithCar.getCarList().size()));
-
-		randomZoneWithCar.removeCar(randomCar);
-		randomZoneWithCar.setChanged(true);
-		randomToZone.addCar(randomCar);
-		randomToZone.setChanged(true);
+		
 
 //		System.out.println("Moving " + randomCar.getCarId() + " from " + randomZoneWithCar + " to " + randomToZone);
 
-		neigbourZones.add(randomZoneWithCar);
-		neigbourZones.add(randomToZone);
-
+		
+		
+			for (Zone zone : neigbourZones) {
+				if (zone.getCarList().size() > 0)
+					zonesWithCars.add(zone);
+			}
+			
+			int iterations=amountOfCars/2;
+			
+			for(int i=0;i<iterations&&zonesWithCars.size()>0;i++){
+			//Random zone which will lose a car
+			Zone randomZoneWithCar = zonesWithCars.get(Problem.random.nextInt(zonesWithCars.size()));
+			neigbourZones.remove(randomZoneWithCar);
+			Zone randomToZone = neigbourZones.remove(Problem.random.nextInt(neigbourZones.size()));
+			//Random car from zone with cars
+			Car randomCar = randomZoneWithCar.getCarList()
+					.get(Problem.random.nextInt(randomZoneWithCar.getCarList().size()));
+			randomZoneWithCar.removeCar(randomCar);
+			randomZoneWithCar.setChanged(true);
+			randomToZone.addCar(randomCar);
+			randomToZone.setChanged(true);
+			neigbourZones.add(randomZoneWithCar);
+			neigbourZones.add(randomToZone);
+			if(randomZoneWithCar.getCarList().size()<1) {
+				zonesWithCars.remove(randomZoneWithCar);
+			}
+			/*if(!zonesWithCars.contains(randomToZone)) {
+				
+				zonesWithCars.add(randomToZone);
+			}*/
+			
+			}
+			
 		for(Zone zone : neigbourZones){
 			zone.handleRequests();
 		}
@@ -145,7 +160,6 @@ public class Solution {
 	}
 
 	private void calculateCost() {
-		// TODO Auto-generated method stub
 		cost = 0;
 		
 		for(Zone z:zones) {
